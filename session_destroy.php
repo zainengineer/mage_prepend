@@ -48,9 +48,9 @@ if (!empty($_GET['session_destroy'])){
         echo "<br/> no cookies found  File:" . __FILE__ . " line:" . __LINE__ . "<br/>\r\n";
     }
     else{
-        \ZainLib\Helper::printr($cookies,'cookies');
-        \ZainLib\Helper::printr($cookiNameList,'cookie names');
-        \ZainLib\Helper::printr($domainList,'domain list');
+        \ZainPrePend\lib\printr($cookies,'cookies');
+        \ZainPrePend\lib\printr($cookiNameList,'cookie names');
+        \ZainPrePend\lib\printr($domainList,'domain list');
     }
     echo "<br/> destroyed your session  File:" . __FILE__ . " line:" . __LINE__ . "<br/>\r\n";
     die;

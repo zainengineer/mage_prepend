@@ -30,11 +30,11 @@ function ZainShutDownFunction()
         $error['type'] = array_search($error['type'],$errorConstants);
     }
 
-    \ZainLib\Helper::printr($error);
+    \ZainPrePend\lib\printr($error);
     if (function_exists('xdebug_get_function_stack')){
-        \ZainLib\Helper::printr(xdebug_get_function_stack());
+        \ZainPrePend\lib\printr(xdebug_get_function_stack());
     }
-    \ZainLib\Helper::printr($error);
+    \ZainPrePend\lib\printr($error);
     if (function_exists('xdebug_break')){
         xdebug_break();
     }
