@@ -24,7 +24,7 @@ function getContentsFileName($urlKey)
 
 
 $urlList = array('/',
-                 '/checkout/onepage',
+                 '/checkout/onepage/index',
 
 );
 function showUrlContents($urlList)
@@ -34,7 +34,15 @@ function showUrlContents($urlList)
     }
     $request = $_SERVER["REQUEST_URI"];
     $request = rtrim($request,'/');
-    if (in_array($request, $urlList)) {
+    $checkContents = false;
+    if (in_array($request, $urlList)){
+        $checkContents = true;
+    }
+    else{
+        $request = $request . '/index';
+        $checkContents = in_array($request, $urlList);
+    }
+    if ($checkContents) {
         $contents = getContentsFileName($request);
         if ($contents) {
             preg_match("/<body[^>]*>/", $contents, $matches);
