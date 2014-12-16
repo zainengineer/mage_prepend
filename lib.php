@@ -38,7 +38,7 @@ function printr($object, $name = '', $attributes = false, $properties = false, $
     $preStart = '<pre>';
     $preEnd = '</pre>';
     //xdebug overloads var_dump with html so ignore that
-    if (is_object($object) && function_exists('xdebug_break')) {
+    if (!is_array($object) && function_exists('xdebug_break')) {
         $htmlEntities = false;
         $preStart = '';
         $preEnd = '';
