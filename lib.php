@@ -48,6 +48,11 @@ function printr($object, $name = '', $attributes = false, $properties = false, $
         print  $file . ' on line ' . $line . " $name is: ";
     }
     else {
+
+        $phpStormRemote = true;
+        if ($phpStormRemote){
+            $file = "<a href='http://localhost:8091/?message=$file:$line'>$file</a>";
+        }
         print '<div style="background: #FFFBD6">';
         $nameLine = '';
         if ($name)
