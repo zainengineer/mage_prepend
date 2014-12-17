@@ -11,6 +11,7 @@ if (isset($_SERVER["REQUEST_URI"])){
 require_once dirname(__FILE__) . '/shutdown.php';
 require_once dirname(__FILE__) . '/lib.php';
 require_once dirname(__FILE__) . '/mage_include.php';
+require_once dirname(__FILE__) . '/param_response.php';
 $projectCustomFile = dirname(__FILE__) .'/project_custom/include.php';
 if (file_exists($projectCustomFile)){
     require_once $projectCustomFile;

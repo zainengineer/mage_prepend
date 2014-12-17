@@ -3,7 +3,7 @@ namespace ZainPrePend\MageInclude;
 function includeMage()
 {
     showErrors();
-    if (class_exists('Mage')) {
+    if (class_exists('\Mage')) {
         return;
     }
     if (!empty($_GET['no_mage'])) {
