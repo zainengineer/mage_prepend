@@ -50,9 +50,7 @@ function printr($object, $name = '', $attributes = false, $properties = false, $
     else {
 
         $phpStormRemote = true;
-        if ($phpStormRemote){
-            $file = "<a href='http://localhost:8091/?message=$file:$line'>$file</a>";
-        }
+        echo getPhpStormLine($file,$line);
         print '<div style="background: #FFFBD6">';
         $nameLine = '';
         if ($name)
@@ -78,6 +76,11 @@ function printr($object, $name = '', $attributes = false, $properties = false, $
     }
 }
 
+function getPhpStormLine($file, $line)
+{
+    return "<a href='http://localhost:8091/?message=$file:$line'>$file</a>";
+
+}
 Class Logger
 {
     public static $log = array();
@@ -113,4 +116,9 @@ Class Logger
         }
         file_put_contents($dumpFile, $dumpContent);
     }
+}
+function showException(\Exception $e)
+{
+    echo getPhpStormLine($e->getFile(),$e->getLine());
+    printr($e);
 }

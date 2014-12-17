@@ -1,5 +1,6 @@
 <?php
 namespace ZainPrePend\ShutDown;
+use \ZainPrePend\lib;
 function ZainShutDownFunction()
 {
     $error = error_get_last();
@@ -33,14 +34,14 @@ function ZainShutDownFunction()
     if ($phpStormRemote && isset($error['file']) && isset($error['line'])){
         $file = $error['file'];
         $line = $error['line'];
-        $stormLine =  "<a href='http://localhost:8091/?message=$file:$line'>$file</a>";
+        $stormLine = lib\getPhpStormLine($file,$line);
         echo "\n<br/>$stormLine <br/>\n";
     }
-    \ZainPrePend\lib\printr($error);
+    lib\printr($error);
     if (function_exists('xdebug_get_function_stack')){
-        \ZainPrePend\lib\printr(xdebug_get_function_stack());
+        lib\printr(xdebug_get_function_stack());
     }
-    \ZainPrePend\lib\printr($error);
+    lib\printr($error);
     if (function_exists('xdebug_break')){
         xdebug_break();
     }
