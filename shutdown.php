@@ -34,14 +34,14 @@ function ZainShutDownFunction()
     if ($phpStormRemote && isset($error['file']) && isset($error['line'])){
         $file = $error['file'];
         $line = $error['line'];
-        $stormLine = lib\getPhpStormLine($file,$line);
+        $stormLine = lib\T::getPhpStormLine($file,$line);
         echo "\n<br/>$stormLine <br/>\n";
     }
-    lib\printr($error);
+    lib\T::printr($error);
     if (function_exists('xdebug_get_function_stack')){
-        lib\printr(xdebug_get_function_stack());
+        lib\T::printr(xdebug_get_function_stack());
     }
-    lib\printr($error);
+    lib\T::printr($error);
     if (function_exists('xdebug_break')){
         xdebug_break();
     }

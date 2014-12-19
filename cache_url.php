@@ -47,7 +47,7 @@ function showUrlContents($urlList)
         if ($contents) {
             preg_match("/<body[^>]*>/", $contents, $matches);
             if ($matches) {
-//                \ZainPrePend\lib\printr($matches);
+//                \ZainPrePend\lib\T::printr($matches);
 //                die;
                 $bodyPreFix = "<span
 style ='font-size:22px ; position:absolute; left:0;top:0;z-index:99999; color:green;'>

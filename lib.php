@@ -1,86 +1,136 @@
 <?php
 namespace ZainPrePend\lib;
 
-function printr($object, $name = '', $attributes = false, $properties = false, $htmlEntities = true)
+Class T
 {
-    $console = false;
-    if (in_array(php_sapi_name(), array('cli'))) {
-        $console = true;
-    }
-    $classHint = '';
-    if (($attributes | $properties) && (is_array($object) || is_object($object))) {
-        if (is_object($object)) {
-            $class = get_class($object);
-            if (!$name)
-                $name = $class;
-            else
-                $classHint = 'type: ' . $class;
+
+    /**
+     * @param $contents
+     * @param $start
+     * @param $end
+     * @param bool $removeStart
+     * @param bool $removeEnd
+     * @return string
+     */
+    static public function getBetweenString($contents, $start, $end, $removeStart = true, $removeEnd = true)
+    {
+        if ($start) {
+            $startPos = strpos($contents, $start);
         }
-        if (function_exists('getAttributes')) {
-            $object = getAttributes($object, $attributes, $properties);
+        else {
+            $startPos = 0;
         }
+        if ($startPos === false) {
+            return false;
+        }
+        if ($end) {
+            $endPos = strpos($contents, $end, $startPos);
+            if ($endPos === false) {
+                $endPos = $endPos = strlen($contents);
+            }
+        }
+        else {
+            $endPos = strlen($contents);
+        }
+        if ($removeStart) {
+            $startPos += strlen($start);
+        }
+        $len = $endPos - $startPos;
+        if (!$removeEnd && $end && $endPos) {
+            $len = $len + strlen($end);
+        }
+        $subString = substr($contents, $startPos, $len);
+        return $subString;
     }
-    $bt = debug_backtrace();
-    $bp = '';
-    $file = $bt[0]['file'];
-    $possibleBasePath = __DIR__;
-    if (strpos($file, $possibleBasePath) === 0) {
-        $bp = $possibleBasePath . '/';
-    }
-    if (!$bp) {
-        $possibleBasePath = dirname(__DIR__);
+
+    public static function printr($object, $name = '', $attributes = false, $properties = false, $htmlEntities = true)
+    {
+        $console = false;
+        if (in_array(php_sapi_name(), array('cli'))) {
+            $console = true;
+        }
+        $classHint = '';
+        if (($attributes | $properties) && (is_array($object) || is_object($object))) {
+            if (is_object($object)) {
+                $class = get_class($object);
+                if (!$name)
+                    $name = $class;
+                else
+                    $classHint = 'type: ' . $class;
+            }
+            if (function_exists('getAttributes')) {
+                $object = getAttributes($object, $attributes, $properties);
+            }
+        }
+        $bt = debug_backtrace();
+        $bp = '';
+        $file = $bt[0]['file'];
+        $possibleBasePath = __DIR__;
         if (strpos($file, $possibleBasePath) === 0) {
             $bp = $possibleBasePath . '/';
         }
-    }
-    $file = str_replace($bp, '', $file);
-    $line = $bt[0]['line'];
-    $preStart = '<pre>';
-    $preEnd = '</pre>';
-    //xdebug overloads var_dump with html so ignore that
-    if (!is_array($object) && function_exists('xdebug_break')) {
-        $htmlEntities = false;
-        $preStart = '';
-        $preEnd = '';
-    }
-    if ($console) {
-        $htmlEntities = false;
-        print  $file . ' on line ' . $line . " $name is: ";
-    }
-    else {
+        if (!$bp) {
+            $possibleBasePath = dirname(__DIR__);
+            if (strpos($file, $possibleBasePath) === 0) {
+                $bp = $possibleBasePath . '/';
+            }
+        }
+        $file = str_replace($bp, '', $file);
+        $line = $bt[0]['line'];
+        $preStart = '<pre>';
+        $preEnd = '</pre>';
+        //xdebug overloads var_dump with html so ignore that
+        if (!is_array($object) && function_exists('xdebug_break')) {
+            $htmlEntities = false;
+            $preStart = '';
+            $preEnd = '';
+        }
+        if ($console) {
+            $htmlEntities = false;
+            print  $file . ' on line ' . $line . " $name is: ";
+        }
+        else {
 
-        $phpStormRemote = true;
-        echo getPhpStormLine($file,$line);
-        print '<div style="background: #FFFBD6">';
-        $nameLine = '';
-        if ($name)
-            $nameLine = '<b> <span style="font-size:18px;">' . $name . "</span></b> $classHint printr:<br/>";
-        print '<span style="font-size:12px;">' . $nameLine . ' ' . $file . ' on line ' . $bt[0]['line'] . '</span>';
-        print '<div style="border:1px so lid #000;">';
-        print $preStart;
+            $phpStormRemote = true;
+            echo self::getPhpStormLine($file,$line);
+            print '<div style="background: #FFFBD6">';
+            $nameLine = '';
+            if ($name)
+                $nameLine = '<b> <span style="font-size:18px;">' . $name . "</span></b> $classHint printr:<br/>";
+            print '<span style="font-size:12px;">' . $nameLine . ' ' . $file . ' on line ' . $bt[0]['line'] . '</span>';
+            print '<div style="border:1px so lid #000;">';
+            print $preStart;
+        }
+        if ($htmlEntities) {
+            ob_start();
+        }
+        if (is_array($object))
+            print_r($object);
+        else
+            var_dump($object);
+        if ($htmlEntities) {
+            $content = ob_get_clean();
+            echo htmlentities($content);
+        }
+        if (!$console) {
+            print $preEnd;
+            echo '</div></div><hr/>';
+        }
     }
-    if ($htmlEntities) {
-        ob_start();
+
+    public static function getPhpStormLine($file, $line)
+    {
+        return "<a href='http://localhost:8091/?message=$file:$line'>$file</a>";
+
     }
-    if (is_array($object))
-        print_r($object);
-    else
-        var_dump($object);
-    if ($htmlEntities) {
-        $content = ob_get_clean();
-        echo htmlentities($content);
-    }
-    if (!$console) {
-        print $preEnd;
-        echo '</div></div><hr/>';
+
+    public static function showException(\Exception $e)
+    {
+        echo self::getPhpStormLine($e->getFile(),$e->getLine());
+        printr($e);
     }
 }
 
-function getPhpStormLine($file, $line)
-{
-    return "<a href='http://localhost:8091/?message=$file:$line'>$file</a>";
-
-}
 Class Logger
 {
     public static $log = array();
@@ -116,9 +166,4 @@ Class Logger
         }
         file_put_contents($dumpFile, $dumpContent);
     }
-}
-function showException(\Exception $e)
-{
-    echo getPhpStormLine($e->getFile(),$e->getLine());
-    printr($e);
 }
