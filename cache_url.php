@@ -1,5 +1,5 @@
 <?php
-namespace Zain\CacheUrl;
+namespace ZainPrePend\CacheUrl;
 return;
 function getFileNameFromUrlKey($urlKey)
 {
@@ -25,6 +25,7 @@ function getContentsFileName($urlKey)
 
 $urlList = array('/',
                  '/checkout/onepage/index',
+                 '/checkout/onepage/success',
 
 );
 function showUrlContents($urlList)

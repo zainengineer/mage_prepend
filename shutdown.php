@@ -1,24 +1,26 @@
 <?php
 namespace ZainPrePend\ShutDown;
+
 use \ZainPrePend\lib;
+
 function ZainShutDownFunction()
 {
     $error = error_get_last();
-    if (!$error){
-        return ;
+    if (!$error) {
+        return;
     }
     //supressed errors
-    if (!error_reporting()){
-        return ;
+    if (!error_reporting()) {
+        return;
     }
     if (isset($error['type']) && in_array($error['type'], array(E_ERROR, E_PARSE, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR, E_COMPILE_WARNING))) {
 
     }
-    else{
-        return ;
+    else {
+        return;
     }
     ob_clean();
-    if (($error['type'] == E_ERROR) && strpos($error['message'],'memory')){
+    if (($error['type'] == E_ERROR) && strpos($error['message'], 'memory')) {
         \Mage::reset();
     }
     debug_print_backtrace();
@@ -27,22 +29,54 @@ function ZainShutDownFunction()
     $errorConstants = $errorConstants['Core'];
     //filter errors in the constants
     $errorConstants = array_intersect_key($errorConstants, array_flip(preg_grep('/^E_(\w+)/i', array_keys($errorConstants))));
-    if (array_search($error['type'],$errorConstants)!==false){
-        $error['type'] = array_search($error['type'],$errorConstants);
+    if (array_search($error['type'], $errorConstants) !== false) {
+        $error['type'] = array_search($error['type'], $errorConstants);
     }
     $phpStormRemote = true;
-    if ($phpStormRemote && isset($error['file']) && isset($error['line'])){
+    if ($phpStormRemote && isset($error['file']) && isset($error['line'])) {
         $file = $error['file'];
         $line = $error['line'];
-        $stormLine = lib\T::getPhpStormLine($file,$line);
+
+        if (!empty($error['type']) && !empty($error['message']) &&
+            $error['type'] == 'E_ERROR' && (strpos($error['message'], 'Uncaught exception') === 0)
+            && ($errorTrace = lib\T::getBetweenString($error['message'], "Stack trace:\n", ""))
+        ) {
+            $counter = 0;
+            while (true) {
+                $lineInfo = lib\T::getBetweenString($errorTrace, "#$counter", ":");
+                $counter++;
+                $tempFile = lib\T::getBetweenString($lineInfo, " ", "(");
+                $tempLine = lib\T::getBetweenString($lineInfo, "(", ")");
+                $internalFunction = (trim($lineInfo) == '[internal function]' );
+                if ((!$tempFile || !$tempLine) && !$internalFunction ) {
+                    break;
+                }
+                $tempFile = str_replace(BP . '/', '', $tempFile);
+                //if error is originating form lib/ or core/ , I dont want to click it
+                if ((strpos($tempFile, 'lib/') === 0) ||
+                    (strpos($tempFile, 'app/core/') === 0) ||
+                    (strpos($tempFile, 'app/Mage') === 0) ||
+                //not sure if it is needed but some project use core overwrites for basic things
+                (strpos($tempFile, 'app/code/local/Mage/Core') === 0)
+                || $internalFunction
+                ) {
+                    continue;
+                }
+                $file = $tempFile;
+                $line = $tempLine;
+                break;
+            }
+
+        }
+        $stormLine = lib\T::getPhpStormLine($file, $line);
         echo "\n<br/>$stormLine <br/>\n";
     }
     lib\T::printr($error);
-    if (function_exists('xdebug_get_function_stack')){
+    if (function_exists('xdebug_get_function_stack')) {
         lib\T::printr(xdebug_get_function_stack());
     }
     lib\T::printr($error);
-    if (function_exists('xdebug_break')){
+    if (function_exists('xdebug_break')) {
         xdebug_break();
     }
 }
