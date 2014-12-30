@@ -19,7 +19,7 @@ function ZainShutDownFunction()
     else {
         return;
     }
-    ob_clean();
+    @ob_clean();
     if (($error['type'] == E_ERROR) && strpos($error['message'], 'memory')) {
         \Mage::reset();
     }
