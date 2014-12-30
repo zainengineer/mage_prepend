@@ -1,5 +1,6 @@
 <?php
 namespace ZainPrePend\CacheUrl;
+use ZainPrePend\lib;
 return;
 function getFileNameFromUrlKey($urlKey)
 {
@@ -22,12 +23,14 @@ function getContentsFileName($urlKey)
     return false;
 }
 
+if (!isset($urlList)){
+    $urlList = array('/',
+                     '/checkout/onepage/index',
+                     '/checkout/onepage/success',
 
-$urlList = array('/',
-                 '/checkout/onepage/index',
-                 '/checkout/onepage/success',
+    );
+}
 
-);
 function showUrlContents($urlList)
 {
     if (empty($_SERVER["REQUEST_URI"])) {
