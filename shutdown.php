@@ -36,7 +36,13 @@ function ZainShutDownFunction()
     if ($phpStormRemote && isset($error['file']) && isset($error['line'])) {
         $file = $error['file'];
         $line = $error['line'];
-
+        //ignore xdebug errors
+        if ($file=='xdebug://debug-eval'){
+            return ;
+        }
+        if (strpos($file,'xdebug')!== false){
+            xdebug_break();
+        }
         if (!empty($error['type']) && !empty($error['message']) &&
             $error['type'] == 'E_ERROR' && (strpos($error['message'], 'Uncaught exception') === 0)
             && ($errorTrace = lib\T::getBetweenString($error['message'], "Stack trace:\n", ""))
