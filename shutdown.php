@@ -87,6 +87,16 @@ function ZainShutDownFunction()
     }
 }
 
+function printException(\Exception $e)
+{
+    $file = $e->getFile();
+    $line = $e->getLine();
+
+    $stormLine = lib\T::getPhpStormLine($file, $line);
+    echo "\n<br/>$stormLine <br/>\n";
+    lib\T::printr($e->getMessage(),'Error Message');
+    lib\T::printr($e->getTrace(),'error trace');
+}
 register_shutdown_function('\ZainPrePend\ShutDown\ZainShutDownFunction');
 
 //$f=false;
