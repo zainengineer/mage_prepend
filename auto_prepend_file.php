@@ -23,6 +23,6 @@ try {
     require_once dirname(__FILE__) . '/temp.php';
 }
 catch (\Exception $e){
-    \ZainPrePend\ShutDown\printException($e);
+    \ZainPrePend\ShutDown\T::printException($e);
     die;
 }

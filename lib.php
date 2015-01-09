@@ -43,9 +43,10 @@ Class T
         return $subString;
     }
 
-    public static function printr($object, $name = '', $attributes = false, $properties = false, $htmlEntities = true)
+    public static function printr($object, $name = '', $attributes = false, $properties = false, $htmlEntities = true, $return = false)
     {
         $console = false;
+        $response = '';
         if (in_array(php_sapi_name(), array('cli'))) {
             $console = true;
         }
@@ -63,19 +64,8 @@ Class T
             }
         }
         $bt = debug_backtrace();
-        $bp = '';
         $file = $bt[0]['file'];
-        $possibleBasePath = __DIR__;
-        if (strpos($file, $possibleBasePath) === 0) {
-            $bp = $possibleBasePath . '/';
-        }
-        if (!$bp) {
-            $possibleBasePath = dirname(__DIR__);
-            if (strpos($file, $possibleBasePath) === 0) {
-                $bp = $possibleBasePath . '/';
-            }
-        }
-        $file = str_replace($bp, '', $file);
+        $file = self::removeBasePath($file);
         $line = $bt[0]['line'];
         $preStart = '<pre>';
         $preEnd = '</pre>';
@@ -87,46 +77,82 @@ Class T
         }
         if ($console) {
             $htmlEntities = false;
-            print  $file . ' on line ' . $line . " $name is: ";
+            $response .= $file . ' on line ' . $line . " $name is: ";
         }
         else {
 
             $phpStormRemote = true;
-            echo self::getPhpStormLine($file,$line);
-            print '<div style="background: #FFFBD6">';
+            $response .= self::getPhpStormLine($file, $line);
+            $response .= '<div style="background: #FFFBD6">';
             $nameLine = '';
             if ($name)
                 $nameLine = '<b> <span style="font-size:18px;">' . $name . "</span></b> $classHint printr:<br/>";
-            print '<span style="font-size:12px;">' . $nameLine . ' ' . $file . ' on line ' . $bt[0]['line'] . '</span>';
-            print '<div style="border:1px so lid #000;">';
-            print $preStart;
+            $response .= '<span style="font-size:12px;">' . $nameLine . ' ' . $file . ' on line ' . $bt[0]['line'] . '</span>';
+            $response .= '<div style="border:1px so lid #000;">';
+            $response .= $preStart;
+        }
+        if ($return) {
+            $htmlEntities = false;
+        }
+        else{
+            echo $response;
+            $response = '';
         }
         if ($htmlEntities) {
             ob_start();
         }
-        if (is_array($object))
-            print_r($object);
-        else
+        if (is_array($object) | $return) {
+            if ($return) {
+                $response .= print_r($object, true);
+            }
+            else {
+                print_r($object);
+            }
+        }
+        else {
             var_dump($object);
+        }
+
         if ($htmlEntities) {
             $content = ob_get_clean();
-            echo htmlentities($content);
+            $response.= htmlentities($content);
         }
         if (!$console) {
-            print $preEnd;
-            echo '</div></div><hr/>';
+            $response.= $preEnd;
+            $response.= '</div></div><hr/>';
         }
+        if ($return){
+            return $response;
+        }
+        echo $response;
+    }
+
+    public static function removeBasePath($file)
+    {
+        $bp = '';
+        $possibleBasePath = __DIR__;
+        if (strpos($file, $possibleBasePath) === 0) {
+            $bp = $possibleBasePath . '/';
+        }
+        if (!$bp) {
+            $possibleBasePath = dirname(__DIR__);
+            if (strpos($file, $possibleBasePath) === 0) {
+                $bp = $possibleBasePath . '/';
+            }
+        }
+        $file = str_replace($bp, '', $file);
+        return $file;
     }
 
     public static function getPhpStormLine($file, $line)
     {
-        return "<a href='http://localhost:8091/?message=$file:$line'>$file</a>";
-
+        $file = self::removeBasePath($file);
+        return "<a href='http://localhost:8091/?message=$file:$line'>$file:$line</a>";
     }
 
     public static function showException(\Exception $e)
     {
-        echo self::getPhpStormLine($e->getFile(),$e->getLine());
+        echo self::getPhpStormLine($e->getFile(), $e->getLine());
         printr($e);
     }
 }

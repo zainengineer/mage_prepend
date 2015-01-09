@@ -37,10 +37,10 @@ function ZainShutDownFunction()
         $file = $error['file'];
         $line = $error['line'];
         //ignore xdebug errors
-        if ($file=='xdebug://debug-eval'){
-            return ;
+        if ($file == 'xdebug://debug-eval') {
+            return;
         }
-        if (strpos($file,'xdebug')!== false){
+        if (strpos($file, 'xdebug') !== false) {
             xdebug_break();
         }
         if (!empty($error['type']) && !empty($error['message']) &&
@@ -53,8 +53,8 @@ function ZainShutDownFunction()
                 $counter++;
                 $tempFile = lib\T::getBetweenString($lineInfo, " ", "(");
                 $tempLine = lib\T::getBetweenString($lineInfo, "(", ")");
-                $internalFunction = (trim($lineInfo) == '[internal function]' );
-                if ((!$tempFile || !$tempLine) && !$internalFunction ) {
+                $internalFunction = (trim($lineInfo) == '[internal function]');
+                if ((!$tempFile || !$tempLine) && !$internalFunction) {
                     break;
                 }
                 $tempFile = str_replace(BP . '/', '', $tempFile);
@@ -62,9 +62,9 @@ function ZainShutDownFunction()
                 if ((strpos($tempFile, 'lib/') === 0) ||
                     (strpos($tempFile, 'app/core/') === 0) ||
                     (strpos($tempFile, 'app/Mage') === 0) ||
-                //not sure if it is needed but some project use core overwrites for basic things
-                (strpos($tempFile, 'app/code/local/Mage/Core') === 0)
-                || $internalFunction
+                    //not sure if it is needed but some project use core overwrites for basic things
+                    (strpos($tempFile, 'app/code/local/Mage/Core') === 0)
+                    || $internalFunction
                 ) {
                     continue;
                 }
@@ -87,16 +87,44 @@ function ZainShutDownFunction()
     }
 }
 
-function printException(\Exception $e)
+class T
 {
-    $file = $e->getFile();
-    $line = $e->getLine();
+    static function printException(\Exception $e)
+    {
+        $file = $e->getFile();
+        $line = $e->getLine();
 
-    $stormLine = lib\T::getPhpStormLine($file, $line);
-    echo "\n<br/>$stormLine <br/>\n";
-    lib\T::printr($e->getMessage(),'Error Message');
-    lib\T::printr($e->getTrace(),'error trace');
+        $stormLine = lib\T::getPhpStormLine($file, $line);
+        echo "\n<br/>$stormLine <br/>\n";
+        lib\T::printr($e->getMessage(), 'Error Message');
+        self::printTrace($e->getTrace());
+    }
+
+    static function printTrace(array $trace)
+    {
+        $i = 0;
+        $replaceKeyList = array();
+        $replaceValueList = array();
+
+        foreach ($trace as &$call) {
+            $i++;
+            $file = $call['file'];
+            $line = $call['line'];
+            $phpStormLink = lib\T::getPhpStormLine($file, $line);
+            unset($call['file']);
+            unset($call['line']);
+
+            $call['location'] = 'ZainReplaceIt' . $i;
+            $replaceKeyList[] = $call['location'];
+            $replaceValueList[] = $phpStormLink;
+        }
+
+        $output =  lib\T::printr($trace,'Trace',false,false,true,true);
+        $output = str_replace($replaceKeyList, $replaceValueList, $output);
+        echo $output;
+    }
 }
+
 register_shutdown_function('\ZainPrePend\ShutDown\ZainShutDownFunction');
 
 //$f=false;
