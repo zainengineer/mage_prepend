@@ -1,6 +1,11 @@
 <?php
 namespace ZainPrePend\CacheUrl;
-return;
+use ZainPrePend\lib;
+//return;
+$customCache = dirname(__FILE__) . '/project_custom/cache_url.php';
+if (file_exists($customCache)){
+    require_once $customCache;
+}
 function getFileNameFromUrlKey($urlKey)
 {
     if ($urlKey == '/') {
@@ -22,12 +27,14 @@ function getContentsFileName($urlKey)
     return false;
 }
 
+if (!isset($urlList)){
+    $urlList = array('/',
+                     '/checkout/onepage/index/',
+                     '/checkout/onepage/success/',
 
-$urlList = array('/',
-                 '/checkout/onepage/index',
-                 '/checkout/onepage/success',
+    );
+}
 
-);
 function showUrlContents($urlList)
 {
     if (empty($_SERVER["REQUEST_URI"])) {
@@ -35,6 +42,7 @@ function showUrlContents($urlList)
     }
     $request = $_SERVER["REQUEST_URI"];
     $request = rtrim($request, '/');
+    $request = $request . '/';
     $checkContents = false;
     if (in_array($request, $urlList)) {
         $checkContents = true;
@@ -50,9 +58,10 @@ function showUrlContents($urlList)
             if ($matches) {
 //                \ZainPrePend\lib\T::printr($matches);
 //                die;
+                $url = lib\T::getPhpStormLine(__FILE__,__LINE__);
                 $bodyPreFix = "<span
 style ='font-size:22px ; position:absolute; left:0;top:0;z-index:99999; color:green;'>
-This content is loaded from File:" . __FILE__ . " line:" . __LINE__ . " custom cache</span>";
+This content is loaded from $url custom cache</span>";
                 $contents = str_replace($matches[0], $matches[0] . $bodyPreFix, $contents);
             }
             header('Pragma: no-cache');
@@ -72,6 +81,9 @@ function putUrlKeyContents($urlKey)
     $url = $baseUrl . $urlKey;
     $contents = getContentsFromUrl($url);
     if ($contents && ($fileName = getFileNameFromUrlKey($urlKey))) {
+        if (!file_exists(dirname($fileName))){
+            mkdir(dirname($fileName));
+        }
         file_put_contents($fileName, $contents);
     }
 
@@ -94,6 +106,7 @@ function putAllContents($urlList)
 
 if (isset($argv) && isset($argv[0]) && (strpos($argv[0], 'zain_custom') !== false)) {
     putAllContents($urlList);
+    echo "<br/> completed  File:" . __FILE__ . " line:" . __LINE__ . "<br/>\r\n";
     die;
 }
 //avoid loop by get url
