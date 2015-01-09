@@ -1,7 +1,7 @@
 <?php
 namespace ZainPrePend\CacheUrl;
 use ZainPrePend\lib;
-//return;
+return;
 $customCache = dirname(__FILE__) . '/project_custom/cache_url.php';
 if (file_exists($customCache)){
     require_once $customCache;

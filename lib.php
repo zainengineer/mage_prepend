@@ -94,7 +94,7 @@ Class T
         if ($return) {
             $htmlEntities = false;
         }
-        else{
+        else {
             echo $response;
             $response = '';
         }
@@ -115,13 +115,13 @@ Class T
 
         if ($htmlEntities) {
             $content = ob_get_clean();
-            $response.= htmlentities($content);
+            $response .= htmlentities($content);
         }
         if (!$console) {
-            $response.= $preEnd;
-            $response.= '</div></div><hr/>';
+            $response .= $preEnd;
+            $response .= '</div></div><hr/>';
         }
-        if ($return){
+        if ($return) {
             return $response;
         }
         echo $response;
@@ -162,9 +162,24 @@ Class Logger
     public static $log = array();
     public static $appendLogToFile = true;
     public static $appendLogFile = '/tmp/zain_log_prepend.txt';
+    public static $callInit = true;
+
+    public static function init()
+    {
+        if (!self::$callInit) {
+            return;
+        }
+        self::$callInit = true;
+        self::$appendLogFile = dirname(__FILE__) . '/temp/zain_log_prepend.txt';
+        $targetDirectory = dirname(self::$appendLogFile);
+        if (!file_exists($targetDirectory)) {
+            mkdir($targetDirectory);
+        }
+    }
 
     public static function addLog($content)
     {
+        self::init();
         self::$log[] = $content;
         self::appendLogToFile($content);
     }
@@ -186,10 +201,14 @@ Class Logger
     public static function dumpContentToFile($content, $varExport = true)
     {
         $dumpFile = dirname(dirname(__FILE__)) . '/dump.txt';
+        if (function_exists('xdebug_break')) {
+            xdebug_break();
+        }
         $dumpContent = $content;
         if ($varExport) {
             $dumpContent = var_export($dumpContent, true);
         }
         file_put_contents($dumpFile, $dumpContent);
+        return is_string($dumpContent) ? strlen($dumpContent) : count($dumpContent);
     }
 }

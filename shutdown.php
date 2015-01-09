@@ -19,6 +19,11 @@ function ZainShutDownFunction()
     else {
         return;
     }
+    $file = isset($error['file']) ? true : false;
+    $line = isset($error['line']) ? true: false;
+    if ($file == 'xdebug://debug-eval') {
+        return;
+    }
     @ob_clean();
     if (($error['type'] == E_ERROR) && strpos($error['message'], 'memory')) {
         \Mage::reset();
@@ -33,13 +38,8 @@ function ZainShutDownFunction()
         $error['type'] = array_search($error['type'], $errorConstants);
     }
     $phpStormRemote = true;
-    if ($phpStormRemote && isset($error['file']) && isset($error['line'])) {
-        $file = $error['file'];
-        $line = $error['line'];
+    if ($phpStormRemote && $file && $line) {
         //ignore xdebug errors
-        if ($file == 'xdebug://debug-eval') {
-            return;
-        }
         if (strpos($file, 'xdebug') !== false) {
             xdebug_break();
         }
@@ -108,13 +108,17 @@ class T
 
         foreach ($trace as &$call) {
             $i++;
+            if (empty($call['file']) || empty($call['file'])){
+                $call = array('location' => 'missing in trace') + $call;
+                continue;
+            }
             $file = $call['file'];
             $line = $call['line'];
             $phpStormLink = lib\T::getPhpStormLine($file, $line);
             unset($call['file']);
             unset($call['line']);
 
-            $call['location'] = 'ZainReplaceIt' . $i;
+            $call = array('location' => 'ZainReplaceIt' . $i) + $call;
             $replaceKeyList[] = $call['location'];
             $replaceValueList[] = $phpStormLink;
         }
