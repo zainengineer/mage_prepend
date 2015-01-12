@@ -19,9 +19,9 @@ function ZainShutDownFunction()
     else {
         return;
     }
-    $file = isset($error['file']) ? true : false;
-    $line = isset($error['line']) ? true: false;
-    if ($file == 'xdebug://debug-eval') {
+    $file = isset($error['file']) ? $error['file'] : false;
+    $line = isset($error['line']) ? $error['line']: false;
+    if ($file === 'xdebug://debug-eval') {
         return;
     }
     @ob_clean();
