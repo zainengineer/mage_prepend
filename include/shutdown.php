@@ -79,7 +79,7 @@ function ZainShutDownFunction()
     }
     lib\T::printr($error);
     if (function_exists('xdebug_get_function_stack')) {
-        lib\T::printr(xdebug_get_function_stack());
+        T::printTrace(xdebug_get_function_stack());
     }
     lib\T::printr($error);
     if (function_exists('xdebug_break')) {

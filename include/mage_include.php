@@ -11,7 +11,7 @@ function includeMage()
         return;
     }
     set_time_limit(0);
-    $fileName = dirname(__FILE__) . '/../app/Mage.php';
+    $fileName = dirname(__FILE__) . '/../../app/Mage.php';
     require_once($fileName);
     \Mage::app();
     showErrors();
