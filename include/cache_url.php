@@ -2,7 +2,7 @@
 namespace ZainPrePend\CacheUrl;
 use ZainPrePend\lib;
 return;
-$customCache = dirname(__FILE__) . '/project_custom/cache_url.php';
+$customCache = dirname(dirname(__FILE__)) . '/project_custom/cache_url.php';
 if (file_exists($customCache)){
     require_once $customCache;
 }
@@ -103,8 +103,18 @@ function putAllContents($urlList)
         putUrlKeyContents($urlKey);
     }
 }
-
-if (isset($argv) && isset($argv[0]) && (strpos($argv[0], 'zain_custom') !== false)) {
+$path = '';
+if (isset($argv)){
+    if (isset($argv[0])){
+        $path = $argv[1];
+    }
+}
+elseif (isset($_SERVER)){
+    if (isset($_SERVER['SCRIPT_NAME'])){
+        $path = $_SERVER['SCRIPT_NAME'];
+    }
+}
+if ((strpos($path, 'zain_custom') !== false)) {
     putAllContents($urlList);
     echo "<br/> completed  File:" . __FILE__ . " line:" . __LINE__ . "<br/>\r\n";
     die;

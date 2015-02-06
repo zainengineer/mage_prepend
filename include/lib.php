@@ -140,6 +140,13 @@ Class T
                 $bp = $possibleBasePath . '/';
             }
         }
+
+        if (!$bp) {
+            $possibleBasePath = dirname(dirname(__DIR__));
+            if (strpos($file, $possibleBasePath) === 0) {
+                $bp = $possibleBasePath . '/';
+            }
+        }
         $file = str_replace($bp, '', $file);
         return $file;
     }
@@ -193,6 +200,7 @@ Class Logger
         if (@file_exists(self::$appendLogFile)) {
             $content = file_get_contents(self::$appendLogFile);
         }
+        $newContent = is_string($newContent) ? $newContent : var_export($newContent, true);
         $content = $content . $newContent . "\n";
         @file_put_contents(self::$appendLogFile, $content);
 
@@ -205,7 +213,7 @@ Class Logger
             xdebug_break();
         }
         $dumpContent = $content;
-        if ($varExport) {
+        if ($varExport && (!is_string($content))) {
             $dumpContent = var_export($dumpContent, true);
         }
         file_put_contents($dumpFile, $dumpContent);

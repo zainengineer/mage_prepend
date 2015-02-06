@@ -9,7 +9,7 @@ function ZainShutDownFunction()
     if (!$error) {
         return;
     }
-    //supressed errors
+    //suppressed errors
     if (!error_reporting()) {
         return;
     }
@@ -75,6 +75,8 @@ function ZainShutDownFunction()
 
         }
         $stormLine = lib\T::getPhpStormLine($file, $line);
+        //to copy paste form debugger
+        $simpleLine = lib\T::removeBasePath($file) . ":$line";
         echo "\n<br/>$stormLine <br/>\n";
     }
     lib\T::printr($error);
