@@ -15,4 +15,14 @@ auto_prepend_file = '/vagrant/zain_custom/auto_prepend_file.php'
 ; auto_prepend_file = '/vagrant/public/zain_custom/auto_prepend_file.php'
 
 sudo service php5-fpm restart
+
+```
+
+for multiple vhosts if you want separate repository clone for each project use the following:
+
+```
+sudo vi /etc/apache2/sites-enabled/site_config_file
+php_value auto_prepend_file "/var/www/vhosts/your_website_root/zain_custom/auto_prepend_file.php"
+sudo service php5-fpm restart
+sudo service apache2 restart
 ```
