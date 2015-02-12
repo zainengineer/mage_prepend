@@ -25,4 +25,7 @@ sudo vi /etc/apache2/sites-enabled/site_config_file
 php_value auto_prepend_file "/var/www/vhosts/your_website_root/zain_custom/auto_prepend_file.php"
 sudo service php5-fpm restart
 sudo service apache2 restart
+touch zain_custom/dump.txt
+chmod 777 zain_custom/dump.txt
 ```
+
