@@ -29,3 +29,7 @@ touch zain_custom/dump.txt
 chmod 777 zain_custom/dump.txt
 ```
 
+To temporarily replace magento Exception printing with custom exception printing
+
+* `app/Mage.php:694`
+* `ini_set('memory_limit','2G');\ZainPrePend\ShutDown\T::printException($e);exit();`
