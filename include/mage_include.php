@@ -1,8 +1,8 @@
 <?php
 namespace ZainPrePend\MageInclude;
-function includeMage()
+function includeMage($code = null)
 {
-    showErrors();
+showErrors();
     if (class_exists('\Mage')) {
         return;
     }
@@ -14,6 +14,9 @@ function includeMage()
     $fileName = dirname(__FILE__) . '/../../app/Mage.php';
     require_once($fileName);
     \Mage::app();
+    if (is_null($code)){
+        \Mage::app()->setCurrentStore(0);
+    }
     showErrors();
     \Mage::setIsDeveloperMode(true);
 }

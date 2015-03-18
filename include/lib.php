@@ -84,7 +84,7 @@ Class T
             $phpStormRemote = true;
             $response .= self::getPhpStormLine($file, $line);
             $response .= '<div style="background: #FFFBD6">';
-            $nameLine = '';
+             $nameLine = '';
             if ($name)
                 $nameLine = '<b> <span style="font-size:18px;">' . $name . "</span></b> $classHint printr:<br/>";
             $response .= '<span style="font-size:12px;">' . $nameLine . ' ' . $file . ' on line ' . $bt[0]['line'] . '</span>';
@@ -159,8 +159,7 @@ Class T
 
     public static function showException(\Exception $e)
     {
-        echo self::getPhpStormLine($e->getFile(), $e->getLine());
-        printr($e);
+        \ZainPrePend\ShutDown\T::printException($e);
     }
 }
 
@@ -209,14 +208,14 @@ Class Logger
     public static function dumpContentToFile($content, $varExport = true)
     {
         $dumpFile = dirname(dirname(__FILE__)) . '/dump.txt';
-        if (function_exists('xdebug_break')) {
-            xdebug_break();
-        }
         $dumpContent = $content;
         if ($varExport && (!is_string($content))) {
             $dumpContent = var_export($dumpContent, true);
         }
         file_put_contents($dumpFile, $dumpContent);
+        if (function_exists('xdebug_break')) {
+            xdebug_break();
+        }
         return is_string($dumpContent) ? strlen($dumpContent) : count($dumpContent);
     }
 }
