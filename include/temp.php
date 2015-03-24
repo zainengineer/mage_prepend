@@ -1,5 +1,4 @@
 <?php
-echo "<br/>   File:" . __FILE__ . " line:" . __LINE__ . "<br/>\r\n";xdebug_break();die;
 //return;
 \ZainPrePend\MageInclude\includeMage();
 
