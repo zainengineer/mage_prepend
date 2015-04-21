@@ -129,17 +129,13 @@ Class T
         }
 
         if ($htmlEntities) {
-            if (ob_get_length() > 5000){
-                $content = "<b>buffer size is very large ignored</b>";
+            $iLength = ob_get_length();
+            if ($iLength > 200000){
+                $response= "<b>buffer size is very large ignored</b>";
                 ob_clean();
             }
             else{
                 $content = ob_get_clean();
-            }
-            if (strlen($content) > 5000){
-                $response.= "<b>content very large ignored<b/>";
-            }
-            else{
                 $response .= htmlentities($content);
                 $response = str_replace(array('[zain_bold]','[/zain_bold]'), array('<b>','</b>'),$response);
             }
