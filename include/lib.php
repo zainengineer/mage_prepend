@@ -43,7 +43,31 @@ Class T
         return $subString;
     }
 
-    public static function printr($object, $name = '', $attributes = false, $properties = false, $htmlEntities = true, $return = false)
+    public static function getSimpleMembers($aList, $maintainKey, $addPlaceHolders)
+    {
+        $aResult = array();
+        foreach ($aList as $key => $value) {
+            if (is_array($value) || is_object($value)) {
+                if ($addPlaceHolders){
+                    $vType = is_object($value) ? get_class($value) : gettype($value);
+                    $value = "[zain_bold]Removed:[/zain_bold] " . $vType;
+                }
+                else{
+                    continue;
+                }
+            }
+            if ($maintainKey) {
+                $aResult[$key] = $value;
+            }
+            else {
+                $aResult[] = $value;
+            }
+        }
+        return $aResult;
+
+    }
+
+    public static function printr($object, $name = '', $simpleArrayElements = true, $htmlEntities = true, $return = false)
     {
         $console = false;
         $response = '';
@@ -51,17 +75,8 @@ Class T
             $console = true;
         }
         $classHint = '';
-        if (($attributes | $properties) && (is_array($object) || is_object($object))) {
-            if (is_object($object)) {
-                $class = get_class($object);
-                if (!$name)
-                    $name = $class;
-                else
-                    $classHint = 'type: ' . $class;
-            }
-            if (function_exists('getAttributes')) {
-                $object = getAttributes($object, $attributes, $properties);
-            }
+        if (($simpleArrayElements) && (is_array($object) )) {
+            $object = self::getSimpleMembers($object,true,true);
         }
         $bt = debug_backtrace();
         $file = $bt[0]['file'];
@@ -114,8 +129,20 @@ Class T
         }
 
         if ($htmlEntities) {
-            $content = ob_get_clean();
-            $response .= htmlentities($content);
+            if (ob_get_length() > 5000){
+                $content = "<b>buffer size is very large ignored</b>";
+                ob_clean();
+            }
+            else{
+                $content = ob_get_clean();
+            }
+            if (strlen($content) > 5000){
+                $response.= "<b>content very large ignored<b/>";
+            }
+            else{
+                $response .= htmlentities($content);
+                $response = str_replace(array('[zain_bold]','[/zain_bold]'), array('<b>','</b>'),$response);
+            }
         }
         if (!$console) {
             $response .= $preEnd;
