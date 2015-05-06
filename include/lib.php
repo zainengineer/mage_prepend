@@ -64,8 +64,8 @@ Class T
             }
         }
         $bt = debug_backtrace();
-        $file = $bt[0]['file'];
-        $file = self::removeBasePath($file);
+        $vFullFilePath = $bt[0]['file'];
+        $file = self::removeBasePath($vFullFilePath);
         $line = $bt[0]['line'];
         $preStart = '<pre>';
         $preEnd = '</pre>';
@@ -82,7 +82,8 @@ Class T
         else {
 
             $phpStormRemote = true;
-            $response .= self::getPhpStormLine($file, $line);
+            $vPHPStormFile = self::isVM() ? $file : $vFullFilePath;
+            $response .= self::getPhpStormLine($vPHPStormFile, $line);
             $response .= '<div style="background: #FFFBD6">';
              $nameLine = '';
             if ($name)
@@ -151,10 +152,18 @@ Class T
         return $file;
     }
 
-    public static function getPhpStormLine($file, $line)
+    public static function getPhpStormLine($vFullPath, $line)
     {
-        $file = self::removeBasePath($file);
-        return "<a href='http://localhost:8091/?message=$file:$line'>$file:$line</a>";
+        $vDisplayPath = self::removeBasePath($vFullPath);
+        $vActualPath = self::isVM()? $vDisplayPath : $vFullPath;
+        return "<a href='http://localhost:8091/?message=$vActualPath:$line'>$vDisplayPath:$line</a>";
+    }
+    public static function isVM()
+    {
+        if (file_exists('/vagrant')){
+            return true;
+        }
+        return false;
     }
 
     public static function showException(\Exception $e)
