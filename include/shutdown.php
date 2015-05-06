@@ -98,8 +98,28 @@ class T
 
         $stormLine = lib\T::getPhpStormLine($file, $line);
         echo "\n<br/>$stormLine <br/>\n";
+        self::displayMagentoErrorSourceLink($e->getMessage());
         lib\T::printr($e->getMessage(), 'Error Message');
         self::printTrace($e->getTrace());
+    }
+    public static function displayMagentoErrorSourceLink($vMessage)
+    {
+        $aMessage = explode(' ',$vMessage);
+        $iCount = count($aMessage);
+        if ($iCount<5){
+            return ;
+        }
+        $vOnLine = $aMessage[$iCount-3] . ' ' . $aMessage [$iCount-2];
+        if ($vOnLine != 'on line'){
+            return ;
+        }
+        $iLineNumber = $aMessage[$iCount-1];
+        if (!is_numeric($iLineNumber)){
+            return ;
+        }
+        $vFile = $aMessage[$iCount-4];
+        $stormLine = lib\T::getPhpStormLine($vFile, $iLineNumber);
+        echo "\n$stormLine <br/><br/>\n";
     }
 
     static function printTrace(array $trace)
