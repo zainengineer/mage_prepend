@@ -39,6 +39,9 @@ class EavInspect
 SELECT `attr_table`.*  FROM `catalog_product_entity_varchar` AS `attr_table`
  WHERE (attr_table.entity_id = '{$this->iProductId}')
 
+  UNION ALL SELECT `attr_table`.* FROM `catalog_product_entity_int` AS `attr_table`
+  WHERE (attr_table.entity_id = '{$this->iProductId}')
+
   UNION ALL SELECT `attr_table`.* FROM `catalog_product_entity_decimal` AS `attr_table`
   WHERE (attr_table.entity_id = '{$this->iProductId}')
 
@@ -58,6 +61,9 @@ zHereDoc;
             $aAttributeId[$aSingleRow['attribute_id']] = (int) $aSingleRow['attribute_id'];
         }
         $vAttributeList = implode(',',$aAttributeId);
+        if (!$vAttributeList){
+            throw new \Exception('No Eav attribute found for ' . $this->iProductId);
+        }
         $vSql = "SELECT attribute_id,attribute_code FROM eav_attribute WHERE attribute_id IN ($vAttributeList)";
         $aAttributeList = $this->rRead->fetchPairs($vSql);
         $aEavData = array();
