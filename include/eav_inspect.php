@@ -8,12 +8,17 @@ class EavInspect
     protected $rRead;
     /** @var \Mage_Core_Model_Resource  */
     protected $rCore;
-    public function __construct($iProductId)
+    protected $bShowAttributeId = false;
+    protected $bShowTable = false;
+    public function __construct($iProductId, $bShowAttributeId, $bShowTable)
     {
         $this->iProductId = $iProductId;
 
         $this->rCore = \Mage::getSingleton('core/resource');
         $this->rRead = $this->rCore->getConnection('core_read');
+
+        $this->bShowAttributeId = $bShowAttributeId;
+        $this->bShowTable= $bShowTable;
     }
     public function inspect()
     {
@@ -34,27 +39,30 @@ class EavInspect
     }
     protected function inspectEav()
     {
-        $vSql = <<< zHereDoc
+        $aTypeList = array(
+           'varchar',
+           'int',
+           'decimal',
+           'text',
+           'datetime',
+        );
+        $aOutput = array();
+        foreach ($aTypeList as $vType) {
+            $vTable = "catalog_product_entity_$vType";
+            $aEav =  $this->inspectEavTable($vTable);
+            if ($this->bShowTable){
+                $aOutput[$vTable] = $aEav;
+            }
+            else{
+                $aOutput= array_merge($aOutput,$aEav);
+            }
+        }
+        return $aOutput;
+    }
 
-SELECT `attr_table`.*  FROM `catalog_product_entity_varchar` AS `attr_table`
- WHERE (attr_table.entity_id = '{$this->iProductId}')
-
-  UNION ALL SELECT `attr_table`.* FROM `catalog_product_entity_int` AS `attr_table`
-  WHERE (attr_table.entity_id = '{$this->iProductId}')
-
-  UNION ALL SELECT `attr_table`.* FROM `catalog_product_entity_decimal` AS `attr_table`
-  WHERE (attr_table.entity_id = '{$this->iProductId}')
-
-  UNION ALL SELECT `attr_table`.* FROM `catalog_product_entity_text` AS `attr_table`
- WHERE (attr_table.entity_id = '{$this->iProductId}')
-
- UNION ALL SELECT `attr_table`.* FROM `catalog_product_entity_datetime` AS `attr_table`
- WHERE (attr_table.entity_id = '{$this->iProductId}')
-
-zHereDoc;
-
-
-
+    protected function inspectEavTable($vTable)
+    {
+        $vSql = "SELECT *  FROM $vTable WHERE (entity_id = '{$this->iProductId}')";
         $aAllRows = $this->rRead->fetchAll($vSql);
         $aAttributeId = array();
         foreach ($aAllRows as $aSingleRow) {
@@ -70,7 +78,13 @@ zHereDoc;
         foreach ($aAllRows as $aSingleRow) {
             $iStoreId = (int) $aSingleRow['store_id'];
             $vAttributeCode = $aAttributeList[ $aSingleRow['attribute_id']];
-            $aEavData[$iStoreId][$vAttributeCode] = $aSingleRow['value'];
+            if ($this->bShowAttributeId){
+                $aEavData[$iStoreId][ $aSingleRow['attribute_id'] . '/' .$vAttributeCode] = $aSingleRow['value'];
+            }
+            else{
+                $aEavData[$iStoreId][$vAttributeCode] = $aSingleRow['value'];
+            }
+
         }
 
         return $aEavData;
