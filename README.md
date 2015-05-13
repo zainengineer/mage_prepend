@@ -29,6 +29,10 @@ touch zain_custom/dump.txt
 chmod 777 zain_custom/dump.txt
 ```
 
+ignore changes in temp file 
+* cd zain_custom
+* `git update-index --assume-unchanged include/temp.php`
+
 To temporarily replace magento Exception printing with custom exception printing
 
 * `app/Mage.php:694`
