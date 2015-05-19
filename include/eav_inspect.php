@@ -10,7 +10,13 @@ class EavInspect
     protected $rCore;
     protected $bShowAttributeId = false;
     protected $bShowTable = false;
-    public function __construct($iProductId, $bShowAttributeId, $bShowTable)
+    /**
+     * @var
+     * customer_entity
+     * catalog_product_entity
+     */
+    protected $vEntityTable;
+    public function __construct($iProductId, $bShowAttributeId, $bShowTable, $vEntityTable)
     {
         $this->iProductId = $iProductId;
 
@@ -19,6 +25,7 @@ class EavInspect
 
         $this->bShowAttributeId = $bShowAttributeId;
         $this->bShowTable= $bShowTable;
+        $this->vEntityTable = $vEntityTable;
     }
     public function inspect()
     {
@@ -32,8 +39,7 @@ class EavInspect
     }
     protected function inspectMain()
     {
-//        $vTableName = $this->rCore->getTableName('catalog_product_entity');
-        $vTableName = 'catalog_product_entity';
+        $vTableName = $this->vEntityTable;
         $vSql  = "select * from $vTableName WHERE entity_id = {$this->iProductId}";
         return $this->rRead->fetchRow($vSql);
     }
@@ -48,7 +54,7 @@ class EavInspect
         );
         $aOutput = array();
         foreach ($aTypeList as $vType) {
-            $vTable = "catalog_product_entity_$vType";
+            $vTable = $this->vEntityTable . "_$vType";
             $aEav =  $this->inspectEavTable($vTable);
             if ($this->bShowTable){
                 $aOutput[$vTable] = $aEav;
@@ -70,21 +76,34 @@ class EavInspect
         }
         $vAttributeList = implode(',',$aAttributeId);
         if (!$vAttributeList){
-            throw new \Exception('No Eav attribute found for ' . $this->iProductId);
+            return array();
+//            throw new \Exception('No Eav attribute found for ' . $this->iProductId);
         }
         $vSql = "SELECT attribute_id,attribute_code FROM eav_attribute WHERE attribute_id IN ($vAttributeList)";
         $aAttributeList = $this->rRead->fetchPairs($vSql);
         $aEavData = array();
         foreach ($aAllRows as $aSingleRow) {
-            $iStoreId = (int) $aSingleRow['store_id'];
-            $vAttributeCode = $aAttributeList[ $aSingleRow['attribute_id']];
-            if ($this->bShowAttributeId){
-                $aEavData[$iStoreId][ $aSingleRow['attribute_id'] . '/' .$vAttributeCode] = $aSingleRow['value'];
+            //product etc
+            if (isset($aSingleRow['store_id'])){
+                $iStoreId = (int) $aSingleRow['store_id'];
+                $vAttributeCode = $aAttributeList[ $aSingleRow['attribute_id']];
+                if ($this->bShowAttributeId){
+                    $aEavData[$iStoreId][ $aSingleRow['attribute_id'] . '/' .$vAttributeCode] = $aSingleRow['value'];
+                }
+                else{
+                    $aEavData[$iStoreId][$vAttributeCode] = $aSingleRow['value'];
+                }
             }
+            //customer etc
             else{
-                $aEavData[$iStoreId][$vAttributeCode] = $aSingleRow['value'];
+                $vAttributeCode = $aAttributeList[ $aSingleRow['attribute_id']];
+                if ($this->bShowAttributeId){
+                    $aEavData[ $aSingleRow['attribute_id'] . '/' .$vAttributeCode] = $aSingleRow['value'];
+                }
+                else{
+                    $aEavData[$vAttributeCode] = $aSingleRow['value'];
+                }
             }
-
         }
 
         return $aEavData;
