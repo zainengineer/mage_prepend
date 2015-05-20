@@ -60,7 +60,7 @@ class EavInspect
                 $aOutput[$vTable] = $aEav;
             }
             else{
-                $aOutput= array_merge($aOutput,$aEav);
+                $aOutput= array_merge_recursive($aOutput,$aEav);
             }
         }
         return $aOutput;
@@ -87,11 +87,13 @@ class EavInspect
             if (isset($aSingleRow['store_id'])){
                 $iStoreId = (int) $aSingleRow['store_id'];
                 $vAttributeCode = $aAttributeList[ $aSingleRow['attribute_id']];
+                //string key is needed so array_merge merges them properly
+                $vStringKey = 'store_id_' . $iStoreId;
                 if ($this->bShowAttributeId){
-                    $aEavData[$iStoreId][ $aSingleRow['attribute_id'] . '/' .$vAttributeCode] = $aSingleRow['value'];
+                    $aEavData[$vStringKey ][ $aSingleRow['attribute_id'] . '/' .$vAttributeCode] = $aSingleRow['value'];
                 }
                 else{
-                    $aEavData[$iStoreId][$vAttributeCode] = $aSingleRow['value'];
+                    $aEavData[$vStringKey ][$vAttributeCode] = $aSingleRow['value'];
                 }
             }
             //customer etc
