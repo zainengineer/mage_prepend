@@ -27,6 +27,31 @@ class EavInspect
         $this->bShowTable= $bShowTable;
         $this->vEntityTable = $vEntityTable;
     }
+    public function inspectFilter($vField)
+    {
+        $aInspect = $this->inspect();
+        $aFilter = array();
+        $aMainTable = $aInspect['Main Table'];
+        if (!$aMainTable){
+            return 'record not found';
+        }
+        $aEav = $aInspect['Eav'];
+        foreach ($aMainTable as $k => $v) {
+            if (strpos($k,$vField)!==false){
+                $aFilter['Main Table'][$k] = $v;
+            }
+        }
+
+        foreach ($aEav as $vStore => $aStoreData) {
+            foreach ($aStoreData as $k => $v) {
+                if (strpos($k,$vField)!==false){
+                    $aFilter['Eav'][$vStore][$k] = $v;
+                }
+            }
+        }
+        return $aFilter;
+
+    }
     public function inspect()
     {
         $aMain = $this->inspectMain();
