@@ -83,10 +83,16 @@ class EavInspect
         $aAttributeList = $this->rRead->fetchPairs($vSql);
         $aEavData = array();
         foreach ($aAllRows as $aSingleRow) {
+            if (isset($aAttributeList[ $aSingleRow['attribute_id']])){
+                $vAttributeCode = $aAttributeList[ $aSingleRow['attribute_id']];
+            }
+            else{
+                $vAttributeCode = 'unknown-attribute-'  . $aSingleRow['attribute_id'];
+            }
+
             //product etc
             if (isset($aSingleRow['store_id'])){
                 $iStoreId = (int) $aSingleRow['store_id'];
-                $vAttributeCode = $aAttributeList[ $aSingleRow['attribute_id']];
                 //string key is needed so array_merge merges them properly
                 $vStringKey = 'store_id_' . $iStoreId;
                 if ($this->bShowAttributeId){
@@ -98,7 +104,6 @@ class EavInspect
             }
             //customer etc
             else{
-                $vAttributeCode = $aAttributeList[ $aSingleRow['attribute_id']];
                 if ($this->bShowAttributeId){
                     $aEavData[ $aSingleRow['attribute_id'] . '/' .$vAttributeCode] = $aSingleRow['value'];
                 }
