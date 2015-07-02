@@ -78,6 +78,7 @@ function ZainShutDownFunction()
         //to copy paste form debugger
         $simpleLine = lib\T::removeBasePath($file) . ":$line";
         echo "\n<br/>$stormLine <br/>\n";
+        T::jsClearPageAndDisplayError($stormLine,$error);
     }
     lib\T::printr($error);
     if (function_exists('xdebug_get_function_stack')) {
@@ -148,6 +149,31 @@ class T
         $output =  lib\T::printr($trace,'Trace',false,false,true,true);
         $output = str_replace($replaceKeyList, $replaceValueList, $output);
         echo $output;
+    }
+    public static function jsClearPageAndDisplayError($vStormLine,$aError)
+    {
+        $aConfig = array('stormLine'=>$vStormLine);
+        ob_start();
+        echo "<pre>";
+        debug_print_backtrace();
+        echo "</pre>";
+        lib\T::printr($aError);
+        if (function_exists('xdebug_get_function_stack')) {
+            T::printTrace(xdebug_get_function_stack());
+        }
+        $vErrorDump = ob_get_clean();
+        $aConfig['errorDump'] = $vErrorDump;
+        $vConfig = json_encode($aConfig);
+        ?>
+        <script>
+            config = <?php echo $vConfig; ?>;
+            setTimeout(function(){
+                document.clear();
+                document.write(config.stormLine);
+                document.write(config.errorDump);
+            },2500);
+        </script>
+        <?php
     }
 }
 
