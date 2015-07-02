@@ -20,8 +20,8 @@ function ZainShutDownFunction()
         return;
     }
     $file = isset($error['file']) ? $error['file'] : false;
-    $line = isset($error['line']) ? $error['line']: false;
-    if (strpos($file,'xdebug://debug-eval')===0) {
+    $line = isset($error['line']) ? $error['line'] : false;
+    if (strpos($file, 'xdebug://debug-eval') === 0) {
         return;
     }
     @ob_clean();
@@ -78,7 +78,7 @@ function ZainShutDownFunction()
         //to copy paste form debugger
         $simpleLine = lib\T::removeBasePath($file) . ":$line";
         echo "\n<br/>$stormLine <br/>\n";
-        T::jsClearPageAndDisplayError($stormLine,$error);
+        T::jsClearPageAndDisplayError($stormLine, $error);
     }
     lib\T::printr($error);
     if (function_exists('xdebug_get_function_stack')) {
@@ -103,22 +103,23 @@ class T
         lib\T::printr($e->getMessage(), 'Error Message');
         self::printTrace($e->getTrace());
     }
+
     public static function displayMagentoErrorSourceLink($vMessage)
     {
-        $aMessage = explode(' ',$vMessage);
+        $aMessage = explode(' ', $vMessage);
         $iCount = count($aMessage);
-        if ($iCount<5){
-            return ;
+        if ($iCount < 5) {
+            return;
         }
-        $vOnLine = $aMessage[$iCount-3] . ' ' . $aMessage [$iCount-2];
-        if ($vOnLine != 'on line'){
-            return ;
+        $vOnLine = $aMessage[$iCount - 3] . ' ' . $aMessage [$iCount - 2];
+        if ($vOnLine != 'on line') {
+            return;
         }
-        $iLineNumber = $aMessage[$iCount-1];
-        if (!is_numeric($iLineNumber)){
-            return ;
+        $iLineNumber = $aMessage[$iCount - 1];
+        if (!is_numeric($iLineNumber)) {
+            return;
         }
-        $vFile = $aMessage[$iCount-4];
+        $vFile = $aMessage[$iCount - 4];
         $stormLine = lib\T::getPhpStormLine($vFile, $iLineNumber);
         echo "\n$stormLine <br/><br/>\n";
     }
@@ -131,7 +132,7 @@ class T
 
         foreach ($trace as &$call) {
             $i++;
-            if (empty($call['file']) || empty($call['file'])){
+            if (empty($call['file']) || empty($call['file'])) {
                 $call = array('location' => 'missing in trace') + $call;
                 continue;
             }
@@ -146,13 +147,14 @@ class T
             $replaceValueList[] = $phpStormLink;
         }
 
-        $output =  lib\T::printr($trace,'Trace',false,false,true,true);
+        $output = lib\T::printr($trace, 'Trace', false, false, true, true);
         $output = str_replace($replaceKeyList, $replaceValueList, $output);
         echo $output;
     }
-    public static function jsClearPageAndDisplayError($vStormLine,$aError)
+
+    public static function jsClearPageAndDisplayError($vStormLine, $aError)
     {
-        $aConfig = array('stormLine'=>$vStormLine);
+        $aConfig = array('stormLine' => $vStormLine);
         ob_start();
         echo "<pre>";
         debug_print_backtrace();
@@ -167,13 +169,13 @@ class T
         ?>
         <script>
             config = <?php echo $vConfig; ?>;
-            setTimeout(function(){
+            setTimeout(function () {
                 document.clear();
                 document.write(config.stormLine);
                 document.write(config.errorDump);
-            },2500);
+            }, 2500);
         </script>
-        <?php
+    <?php
     }
 }
 
