@@ -67,7 +67,7 @@ Class T
 
     }
 
-    public static function printr($object, $name = '', $simpleArrayElements = true, $htmlEntities = true, $return = false)
+    public static function printr($object, $simpleArrayElements = true,$name = '', $htmlEntities = true, $return = false)
     {
         $console = false;
         $response = '';
