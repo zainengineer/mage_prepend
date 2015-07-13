@@ -27,7 +27,7 @@ class EavInspect
         $this->bShowTable= $bShowTable;
         $this->vEntityTable = $vEntityTable;
     }
-    public function inspectFilter($vField)
+    public function inspectFilter($vFieldToFilter)
     {
         $aInspect = $this->inspect();
         $aFilter = array();
@@ -37,16 +37,29 @@ class EavInspect
         }
         $aEav = $aInspect['Eav'];
         foreach ($aMainTable as $k => $v) {
-            if (strpos($k,$vField)!==false){
+            if (strpos($k,$vFieldToFilter)!==false){
                 $aFilter['Main Table'][$k] = $v;
             }
         }
 
         foreach ($aEav as $vStore => $aStoreData) {
             foreach ($aStoreData as $k => $v) {
-                if (strpos($k,$vField)!==false){
-                    $aFilter['Eav'][$vStore][$k] = $v;
+                //normal
+                if (strpos($k,'store_id_')===false){
+                    if (strpos($k,$vFieldToFilter)!==false){
+                        $aFilter['Eav'][$vStore][$k] = $v;
+                    }
                 }
+                //with table information
+                else{
+                    foreach ($v as $vFieldLoop => $value) {
+                        if (strpos($vFieldLoop,$vFieldToFilter)!==false){
+                            $aFilter['Eav'][$vStore][$k][$vFieldLoop] = $value;
+                        }
+                    }
+
+                }
+
             }
         }
         return $aFilter;
