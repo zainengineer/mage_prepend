@@ -24,6 +24,12 @@ function ZainShutDownFunction()
     if (strpos($file, 'xdebug://debug-eval') === 0) {
         return;
     }
+    if ($error['type'] == E_ERROR){
+        $aBackTrace = debug_backtrace();
+        if (class_exists('\Mage') && !\Mage::getIsDeveloperMode() && (count($aBackTrace)==1)){
+            return ;
+        }
+    }
     @ob_clean();
     if (($error['type'] == E_ERROR) && strpos($error['message'], 'memory')) {
         \Mage::reset();
