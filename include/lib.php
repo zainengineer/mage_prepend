@@ -251,3 +251,23 @@ Class Logger
         return is_string($dumpContent) ? strlen($dumpContent) : count($dumpContent);
     }
 }
+
+/**
+ * $fTimeTaken = end($dummy = array(\ZainPrePend\lib\StopWatch::start(),null, \ZainPrePend\lib\StopWatch::lap()));
+ * \ZainPrePend\lib\T::printr(number_format($fTimeTaken,6));
+ * Class StopWatch
+ * @package ZainPrePend\lib
+ */
+Class StopWatch {
+    protected static $fTime  =0;
+    public static function start()
+    {
+        self::$fTime = microtime(true);
+    }
+    public static function lap()
+    {
+        $fCurrenttime = microtime(true);
+        $fDiff = $fCurrenttime - self::$fTime;
+        return $fDiff;
+    }
+}
