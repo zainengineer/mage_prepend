@@ -18,6 +18,7 @@ function executeIndex()
         require_once dirname(__FILE__) . '/include/mage_include.php';
         require_once dirname(__FILE__) . '/include/param_response.php';
         require_once dirname(__FILE__) . '/include/eav_inspect.php';
+        require_once dirname(__FILE__) . '/include/misc.php';
         $projectCustomFile = dirname(__FILE__) . '/project_custom/include.php';
         if (file_exists($projectCustomFile)) {
             require_once $projectCustomFile;
