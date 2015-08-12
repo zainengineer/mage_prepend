@@ -75,11 +75,15 @@ class EavInspect
         );
         return $aReturn;
     }
-    protected function inspectMain()
+    public function inspectMain($vAttribute = '*')
     {
         $vTableName = $this->vEntityTable;
-        $vSql  = "select * from $vTableName WHERE entity_id = {$this->iProductId}";
-        return $this->rRead->fetchRow($vSql);
+        $vSql  = "select $vAttribute from $vTableName WHERE entity_id = {$this->iProductId}";
+        $aReturn = $this->rRead->fetchRow($vSql);
+        if (count(array_keys($aReturn)) == 1){
+            return current($aReturn);
+        }
+        return $aReturn;
     }
     protected function inspectEav()
     {
