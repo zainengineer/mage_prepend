@@ -153,7 +153,7 @@ class T
             $replaceValueList[] = $phpStormLink;
         }
 
-        $output = lib\T::printr($trace, 'Trace', false, false, true, true);
+        $output = lib\T::printr($trace, false,'Trace', false, true);
         $output = str_replace($replaceKeyList, $replaceValueList, $output);
         echo $output;
     }
@@ -161,15 +161,21 @@ class T
     public static function jsClearPageAndDisplayError($vStormLine, $aError)
     {
         $aConfig = array('stormLine' => $vStormLine);
-        ob_start();
-        echo "<pre>";
-        debug_print_backtrace();
-        echo "</pre>";
-        lib\T::printr($aError);
-        if (function_exists('xdebug_get_function_stack')) {
-            T::printTrace(xdebug_get_function_stack());
+        if (function_exists('xdebug_get_function_stack')){
+            ob_start();
+            echo "<pre>";
+            debug_print_backtrace();
+            echo "</pre>";
+            lib\T::printr($aError);
+            if (function_exists('xdebug_get_function_stack')) {
+                T::printTrace(xdebug_get_function_stack());
+            }
+            $vErrorDump = ob_get_clean();
         }
-        $vErrorDump = ob_get_clean();
+        else{
+            $vErrorDump = 'Could not get error dump because xdebug not enabled';
+        }
+
         $aConfig['errorDump'] = $vErrorDump;
         $vConfig = json_encode($aConfig);
         ?>
