@@ -26,7 +26,7 @@ function ZainShutDownFunction()
     }
     if ($error['type'] == E_ERROR){
         $aBackTrace = debug_backtrace();
-        if (class_exists('\Mage') && !\Mage::getIsDeveloperMode() && (count($aBackTrace)==1)){
+        if (class_exists('\Mage') && !\Mage::getIsDeveloperMode() && (count($aBackTrace)>1)){
             return ;
         }
     }
@@ -148,8 +148,8 @@ class T
             unset($call['file']);
             unset($call['line']);
 
-            $call = array('location' => 'ZainReplaceIt' . $i) + $call;
-            $replaceKeyList[] = $call['location'];
+//            $call = array('location' => 'ZainReplaceIt' . $i) + $call;
+//            $replaceKeyList[] = $call['location'];
             $replaceValueList[] = $phpStormLink;
         }
 
