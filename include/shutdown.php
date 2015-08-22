@@ -132,12 +132,9 @@ class T
 
     static function printTrace(array $trace)
     {
-        $i = 0;
-        $replaceKeyList = array();
-        $replaceValueList = array();
+        $aReplace = array();
 
-        foreach ($trace as &$call) {
-            $i++;
+        foreach ($trace as $key => &$call) {
             if (empty($call['file']) || empty($call['file'])) {
                 $call = array('location' => 'missing in trace') + $call;
                 continue;
@@ -148,13 +145,13 @@ class T
             unset($call['file']);
             unset($call['line']);
 
-//            $call = array('location' => 'ZainReplaceIt' . $i) + $call;
-//            $replaceKeyList[] = $call['location'];
-            $replaceValueList[] = $phpStormLink;
+            $call = array('location' => 'ZainReplaceIt' . $key) + $call;
+            $aReplace[$call['location']] = $phpStormLink;
         }
 
         $output = lib\T::printr($trace, false,'Trace', false, true);
-        $output = str_replace($replaceKeyList, $replaceValueList, $output);
+        //using strtr instead of replace as ZainReplace1 and ZainReplace10 will conflict causing incorrect replacement
+        $output = strtr($output,$aReplace);
         echo $output;
     }
 
