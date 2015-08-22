@@ -182,7 +182,7 @@ class T
                 document.clear();
                 document.write(config.stormLine);
                 document.write(config.errorDump);
-            }, 2500);
+            }, 100);
         </script>
     <?php
     }
