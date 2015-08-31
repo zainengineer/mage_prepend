@@ -119,7 +119,7 @@ Class T
         }
         if (is_array($object) | $return) {
             if ($return) {
-                $response .= print_r($object, true);
+                $response .= @print_r($object, true);
             }
             else {
                 print_r($object);

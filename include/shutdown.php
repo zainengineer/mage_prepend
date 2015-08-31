@@ -1,32 +1,37 @@
 <?php
 namespace ZainPrePend\ShutDown;
-
+require_once dirname(__FILE__) . '/add_link_to_admin_product.php';
 use \ZainPrePend\lib;
 
 function ZainShutDownFunction()
 {
     $error = error_get_last();
     if (!$error) {
+        outPutAfterSuccess();
         return;
     }
     //suppressed errors
     if (!error_reporting()) {
+        outPutAfterSuccess();
         return;
     }
     if (isset($error['type']) && in_array($error['type'], array(E_ERROR, E_PARSE, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR, E_COMPILE_WARNING))) {
 
     }
     else {
+        outPutAfterSuccess();
         return;
     }
     $file = isset($error['file']) ? $error['file'] : false;
     $line = isset($error['line']) ? $error['line'] : false;
     if (strpos($file, 'xdebug://debug-eval') === 0) {
+        outPutAfterSuccess();
         return;
     }
     if ($error['type'] == E_ERROR){
         $aBackTrace = debug_backtrace();
         if (class_exists('\Mage') && !\Mage::getIsDeveloperMode() && (count($aBackTrace)>1)){
+            outPutAfterSuccess();
             return ;
         }
     }
@@ -94,6 +99,11 @@ function ZainShutDownFunction()
     if (function_exists('xdebug_break')) {
         xdebug_break();
     }
+}
+
+function outPutAfterSuccess()
+{
+    \ZainPrePend\AdminProductLink\T::addProductLink();
 }
 
 class T
