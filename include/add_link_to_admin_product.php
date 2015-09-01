@@ -32,7 +32,6 @@ class T {
             <script>
                 function zainAddAdminRows()
                 {
-                    debugger;
                     var admin_rows = $$('#productGrid_table tr');
                     // more than header rows
                     if (admin_rows.length < 3){
@@ -43,14 +42,20 @@ class T {
                         tr = admin_rows[i];
                         href = tr.title;
                         td = tr.childElements()[1];
-                        id = td.getInnerText();
-                        link = "<a href='_href'>_id</a>";
-                        link =  link.replace('_href',href);
-                        link = link.replace('_id',id);
+                        id = parseInt(td.getInnerText());
+                        link = "<a href='_href'>_id</a> <a href='javascript:void(0)' onclick='window.prompt(_id,_id)'>copy</a>";
+                        link =  link.replace(/_href/g,href);
+                        link = link.replace(/_id/g,id);
                         td.innerHTML = link;
                     }
                 }
                 zainAddAdminRows();
+
+                Ajax.Responders.register({
+                    onComplete: function() {
+                        zainAddAdminRows();
+                    }
+                });
 
             </script>
             <?php
