@@ -234,6 +234,9 @@ Class Logger
         $newContent = is_string($newContent) ? $newContent : var_export($newContent, true);
         $content = $content . $newContent . "\n";
         @file_put_contents(self::$appendLogFile, $content);
+        if (!is_writable(self::$appendLogFile)){
+            throw new \Exception(self::$appendLogFile . ' not writable ');
+        }
 
     }
 
