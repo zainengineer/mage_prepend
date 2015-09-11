@@ -15,6 +15,7 @@ function executeIndex()
         }
         require_once dirname(__FILE__) . '/include/shutdown.php';
         require_once dirname(__FILE__) . '/include/lib.php';
+        require_once dirname(__FILE__) . '/include/server_param.php';
         require_once dirname(__FILE__) . '/include/mage_include.php';
         require_once dirname(__FILE__) . '/include/param_response.php';
         require_once dirname(__FILE__) . '/include/eav_inspect.php';

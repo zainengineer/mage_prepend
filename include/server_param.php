@@ -1,0 +1,7 @@
+<?php
+//unset($_SERVER['MAGE_IS_DEVELOPER_MODE']);
+//$_SERVER['MAGE_IS_DEVELOPER_MODE'] = 1;
+
+//$_SERVER['MAGE_RUN_CODE'] = '';
+//$_SERVER['MAGE_RUN_TYPE']= '';
+//$_SERVER['HTTP_HOST'] = '';
