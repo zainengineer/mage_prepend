@@ -221,6 +221,10 @@ Class Logger
         self::$log[] = $content;
         self::appendLogToFile($content);
     }
+    public static function log($content)
+    {
+        return self::addLog($content);
+    }
 
     public static function appendLogToFile($newContent)
     {

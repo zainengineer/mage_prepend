@@ -65,8 +65,11 @@ class EavInspect
         return $aFilter;
 
     }
-    public function inspect()
+    public function inspect($vFieldsToFilter = '')
     {
+        if ($vFieldsToFilter){
+            return $this->inspectFilter($vFieldsToFilter);
+        }
         $aMain = $this->inspectMain();
         $aEav = $this->inspectEav();
         $aReturn = array(
