@@ -7,7 +7,10 @@ if (!isset($_SERVER['REQUEST_URI'])) {
 }
 
 $requestPath = $_SERVER['REQUEST_URI'];
-if (strpos($requestPath, '/index.php/admin/catalog_product/edit') !== 0) {
+if (empty($vAdminPath)){
+    $vAdminPath= 'admin';
+}
+if (strpos($requestPath, "/index.php/$vAdminPath/catalog_product/edit") !== 0) {
     return;
 }
 
