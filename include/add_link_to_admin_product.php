@@ -39,7 +39,6 @@ class T {
                         return false;
                     }
                     var headerRow = admin_rows[0];
-                    debugger;
                     var childElements = headerRow.childElements();
                     var td, text, idColumn, found;
                     found = false;
