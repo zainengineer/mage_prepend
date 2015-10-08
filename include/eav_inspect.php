@@ -36,8 +36,9 @@ class EavInspect
             return 'record not found';
         }
         $aEav = $aInspect['Eav'];
+        $aAlwaysInclude = array('entity_id','name');
         foreach ($aMainTable as $k => $v) {
-            if (strpos($k,$vFieldToFilter)!==false){
+            if ((strpos($k,$vFieldToFilter)!==false) || in_array($k,$aAlwaysInclude)){
                 $aFilter['Main Table'][$k] = $v;
             }
         }
@@ -46,14 +47,14 @@ class EavInspect
             foreach ($aStoreData as $k => $v) {
                 //normal
                 if (strpos($k,'store_id_')===false){
-                    if (strpos($k,$vFieldToFilter)!==false){
+                    if ((strpos($k,$vFieldToFilter)!==false) || in_array($k,$aAlwaysInclude)){
                         $aFilter['Eav'][$vStore][$k] = $v;
                     }
                 }
                 //with table information
                 else{
                     foreach ($v as $vFieldLoop => $value) {
-                        if (strpos($vFieldLoop,$vFieldToFilter)!==false){
+                        if ((strpos($vFieldLoop,$vFieldToFilter)!==false) || in_array($k,$aAlwaysInclude)){
                             $aFilter['Eav'][$vStore][$k][$vFieldLoop] = $value;
                         }
                     }
