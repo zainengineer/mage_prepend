@@ -32,16 +32,34 @@ class T {
             <script>
                 function zainAddAdminRows()
                 {
+
                     var admin_rows = $$('#productGrid_table tr');
                     // more than header rows
                     if (admin_rows.length < 3){
                         return false;
                     }
-                    var i, tr, href, td, id, link;
+                    var headerRow = admin_rows[0];
+                    var childElements = headerRow.childElements();
+                    var td, text, idColumn, found;
+                    found = false;
+                    for (i=0; i<childElements.length; i++) {
+                        var td = childElements[i];
+                        if (td && (text = td.getInnerText().trim().toLowerCase())){
+                            if (text == 'id'){
+                                idColumn = i;
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!found){
+                        return ;
+                    }
+                    var i, tr, href, id, link;
                     for (i = 2; i < admin_rows.length; i++) {
                         tr = admin_rows[i];
                         href = tr.title;
-                        td = tr.childElements()[1];
+                        td = tr.childElements()[idColumn];
                         id = parseInt(td.getInnerText());
                         link = "<a href='_href'>_id</a> <a href='javascript:void(0)' onclick='window.prompt(_id,_id)'>copy</a>";
                         link =  link.replace(/_href/g,href);
