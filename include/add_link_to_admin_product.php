@@ -32,13 +32,12 @@ class T {
             <script>
                 function zainAddAdminRows()
                 {
-
-                    var admin_rows = $$('#productGrid_table tr');
+                    var admin_rows = $$('#productGrid_table>tbody>tr');
                     // more than header rows
-                    if (admin_rows.length < 3){
+                    if (!admin_rows.length){
                         return false;
                     }
-                    var headerRow = admin_rows[0];
+                    var headerRow = $$('#productGrid_table>thead>tr')[0];
                     var childElements = headerRow.childElements();
                     var td, text, idColumn, found;
                     found = false;
@@ -56,7 +55,7 @@ class T {
                         return ;
                     }
                     var i, tr, href, id, link;
-                    for (i = 2; i < admin_rows.length; i++) {
+                    for (i = 0; i < admin_rows.length; i++) {
                         tr = admin_rows[i];
                         href = tr.title;
                         td = tr.childElements()[idColumn];
