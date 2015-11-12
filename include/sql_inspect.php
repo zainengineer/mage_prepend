@@ -14,8 +14,12 @@ class SqlInspect
      * catalog_product_entity
      */
     protected $vEntityTable;
-    public function __construct($vSql)
+    public function __construct($vSql, $limit)
     {
+        if ($limit && !strpos($vSql,' limit ')){
+            $vSql = rtrim($vSql,';');
+            $vSql .= " limit $limit;";
+        }
         $this->vSql = $vSql;
 
         $this->rCoreResource = \Mage::getSingleton('core/resource');
