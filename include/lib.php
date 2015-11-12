@@ -67,7 +67,7 @@ Class T
 
     }
 
-    public static function printr($object, $simpleArrayElements = true,$name = '', $htmlEntities = true, $return = false)
+    public static function printr($object, $simpleArrayElements = true,$name = '', $htmlEntities = true, $return = false, $options = array())
     {
         $console = false;
         $response = '';
@@ -126,7 +126,12 @@ Class T
             }
         }
         else {
-            var_dump($object);
+            if (!empty($options['echo']) || is_string($object)){
+                echo "<pre>$object</pre>";
+            }
+            else{
+                var_dump($object);
+            }
         }
 
         if ($htmlEntities) {
