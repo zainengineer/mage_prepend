@@ -8,6 +8,8 @@ class SqlInspect
     protected $rRead;
     /** @var \Mage_Core_Model_Resource  */
     protected $rCoreResource;
+    protected $bColumnOnly = false;
+    protected $bKeyValue;
     /**
      * @var
      * customer_entity
@@ -29,9 +31,34 @@ class SqlInspect
     protected function getQueryRow()
     {
         if (is_null($this->aRows)){
-            $this->aRows = $this->rRead->fetchAssoc($this->vSql);
-            if (count($this->aRows) ==1){
-                $this->aRows = current($this->aRows);
+            $aRows = $this->rRead->fetchAssoc($this->vSql);
+            if (!$aRows){
+                $this->aRows = array();
+            }
+            else{
+                // one column only
+                if ($this->bColumnOnly){
+                    foreach ($aRows as $aSingleRow) {
+                        $this->aRows[] = current($aSingleRow);
+                    }
+                }
+                //key value pair
+                elseif ($this->bKeyValue && isset($this->bKeyValue[0][1])){
+                    foreach ($aRows as $aSingleRow) {
+                        $this->aRows[$aSingleRow[0]] = current($aSingleRow[1]);
+                    }
+                }
+                //normal query
+                else{
+                    //only one record
+                    if (count($aRows) ==1){
+                        $this->aRows = current($aRows);
+                    }
+                    //normal case
+                    else{
+                        $this->aRows = $aRows;
+                    }
+                }
             }
         }
         return $this->aRows;
@@ -50,5 +77,15 @@ class SqlInspect
             $vOutput = $this->vSql . "\n\n" . $vOutput;
         }
         return $vOutput;
+    }
+    public function setColumnOnlyValue($bValue)
+    {
+        $this->bColumnOnly = $bValue;
+        return $this;
+    }
+    public function setKeyValuePairValue($bValue)
+    {
+        $this->bKeyValue = $bValue;
+        return $this;
     }
 }
