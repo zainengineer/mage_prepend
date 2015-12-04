@@ -18,7 +18,7 @@ class SqlInspect
     protected $vEntityTable;
     public function __construct($vSql, $limit)
     {
-        if ($limit && !strpos($vSql,' limit ')){
+        if ($limit && !strpos($vSql,' limit ') && (stripos($vSql,'select')===0)){
             $vSql = rtrim($vSql,';');
             $vSql .= " limit $limit;";
         }
