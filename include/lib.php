@@ -198,6 +198,23 @@ Class T
     {
         \ZainPrePend\ShutDown\T::printException($e);
     }
+    public static function filterArray($aData, $vFilter)
+    {
+        if (!$aData){
+            $aData = array();
+        }
+        if (!$vFilter){
+            return $aData;
+        }
+        $aReturn = array();
+        foreach ($aData as $vKey => $value) {
+            if (strpos($vKey,$vFilter)!==false){
+                $aReturn[$vKey] = $value;
+            }
+        }
+        return $aReturn;
+    }
+
 }
 
 Class Logger

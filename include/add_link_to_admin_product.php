@@ -15,7 +15,7 @@ class T {
             return;
         }
         $vRequestPath = $_SERVER['REQUEST_URI'];
-        if (strpos($vRequestPath, 'catalog_product/index') !== 0) {
+        if (strpos($vRequestPath, 'catalog_product/index') !== false) {
             $vRequestPath = trim($vRequestPath,'/');
             if (strpos($vRequestPath,'edit')){
                 return ;
