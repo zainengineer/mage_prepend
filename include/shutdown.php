@@ -39,6 +39,10 @@ function ZainShutDownFunction()
     if (($error['type'] == E_ERROR) && strpos($error['message'], 'memory')) {
         \Mage::reset();
     }
+    $iMemoryUsage =  memory_get_usage();
+    if ($iMemoryUsage < 2 * pow(10,9)){
+        ini_set('memory_limit','2G');
+    }
     debug_print_backtrace();
     //convert error type into string
     $errorConstants = get_defined_constants(true);
