@@ -31,6 +31,7 @@ function executeIndex()
         require_once dirname(__FILE__) . '/include/duplicate_posts.php';
         require_once dirname(__FILE__) . '/include/remove_admin_product_popup.php';
         require_once dirname(__FILE__) . '/include/ticks.php';
+        require_once dirname(__FILE__) . '/include/filter_git.php';
         require_once dirname(__FILE__) . '/include/temp.php';
     }
     catch (\Exception $e){
