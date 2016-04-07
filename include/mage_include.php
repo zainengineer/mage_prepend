@@ -31,3 +31,21 @@ function showErrors()
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
 }
+
+/**
+ *
+ * Quick Include magento
+
+umask(0);
+require 'app/Mage.php';
+
+\Mage::setIsDeveloperMode(true);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+set_time_limit(0);
+
+Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
+
+
+ *
+ */
