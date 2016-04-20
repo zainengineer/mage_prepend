@@ -38,6 +38,7 @@ ignore changes in temp file
 * cd zain_custom
 * `git update-index --assume-unchanged include/temp.php`
 * `git update-index --assume-unchanged include/server_param.php`
+* `git update-index --assume-unchanged var/dump.txt`
 
 To temporarily replace magento Exception printing with custom exception printing
 

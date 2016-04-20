@@ -268,7 +268,7 @@ Class Logger
 
     public static function dumpContentToFile($content, $varExport = true)
     {
-        $dumpFile = dirname(dirname(__FILE__)) . '/dump.txt';
+        $dumpFile = dirname(dirname(__FILE__)) . '/var/dump.txt';
         $dumpContent = $content;
         if ($varExport && (!is_string($content))) {
             $dumpContent = var_export($dumpContent, true);
