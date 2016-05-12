@@ -7,5 +7,5 @@ if (!isset($_GET['op'])){
 $vOp = $_GET['op'];
 if ($vOp == 'phpinfo'){
     phpinfo();
-    die;
+    exit;
 }

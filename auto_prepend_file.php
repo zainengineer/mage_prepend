@@ -32,7 +32,8 @@ function executeIndex()
         require_once dirname(__FILE__) . '/include/remove_admin_product_popup.php';
         require_once dirname(__FILE__) . '/include/ticks.php';
         require_once dirname(__FILE__) . '/include/filter_git.php';
-        require_once dirname(__FILE__) . '/include/temp.php';
+        $vTempFile = dirname(__FILE__) . '/include/temp.php';
+        require_once $vTempFile;
     }
     catch (\Exception $e){
         \ZainPrePend\ShutDown\T::printException($e);
