@@ -36,7 +36,7 @@ class EavInspect
             return 'record not found';
         }
         $aEav = $aInspect['Eav'];
-        $aAlwaysInclude = array('entity_id','name');
+        $aAlwaysInclude = array('entity_id','name','sku');
         foreach ($aMainTable as $k => $v) {
             if ((strpos($k,$vFieldToFilter)!==false) || in_array($k,$aAlwaysInclude)){
                 $aFilter['Main Table'][$k] = $v;

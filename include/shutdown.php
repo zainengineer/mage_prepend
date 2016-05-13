@@ -201,8 +201,9 @@ class T
     <?php
     }
 }
-
-register_shutdown_function('\ZainPrePend\ShutDown\ZainShutDownFunction');
+if (php_sapi_name() !== 'cli'){
+    register_shutdown_function('\ZainPrePend\ShutDown\ZainShutDownFunction');
+}
 
 //$f=false;
 //$f->nocall();
