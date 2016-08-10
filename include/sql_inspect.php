@@ -28,7 +28,7 @@ class SqlInspect
         $this->rRead = $this->rCoreResource->getConnection('core_read');
     }
 
-    protected function getQueryRow()
+    public function getQueryRow()
     {
         if (is_null($this->aRows)){
             $aRows = $this->rRead->fetchAssoc($this->vSql);
