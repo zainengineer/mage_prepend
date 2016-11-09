@@ -10,6 +10,31 @@ function ZainShutDownFunction()
         outPutAfterSuccess();
         return;
     }
+    if (!$error) {
+        outPutAfterSuccess();
+        return;
+    }
+    $file = isset($error['file']) ? $error['file'] : false;
+    $line = isset($error['line']) ? $error['line'] : false;
+    /**
+     * Error suppression was used, but it could be a fatal error
+     * No Good work around as we can't be sure if it is a normal error or fatal error
+     * error_get_last() could be last error which did not cause fatal
+     * or it is fatal error which stopped code flow
+     * both have same data in error_get_last()
+     * So just using xdebug_break as a notice / help for developer to find the issue.
+     * Normally it happens when @include a file with syntax error (typed random values)
+     */
+    //
+    //
+    if (!error_reporting()){
+        if (strpos($file, 'xdebug://debug-eval') === false) {
+            if (function_exists('xdebug_break')){
+                xdebug_break();
+            }
+            return;
+        }
+    }
     //suppressed errors
     if (!error_reporting()) {
         outPutAfterSuccess();
@@ -22,8 +47,6 @@ function ZainShutDownFunction()
         outPutAfterSuccess();
         return;
     }
-    $file = isset($error['file']) ? $error['file'] : false;
-    $line = isset($error['line']) ? $error['line'] : false;
     if (strpos($file, 'xdebug://debug-eval') === 0) {
         outPutAfterSuccess();
         return;
