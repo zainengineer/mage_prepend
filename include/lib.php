@@ -261,6 +261,9 @@ Class Logger
         $content = $content . $newContent . "\n";
         @file_put_contents(self::$appendLogFile, $content);
         if (!is_writable(self::$appendLogFile)){
+            if (function_exists('xdebug_break')){
+                xdebug_break();
+            }
             throw new \Exception(self::$appendLogFile . ' not writable ');
         }
 
