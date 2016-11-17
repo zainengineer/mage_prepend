@@ -158,22 +158,28 @@ Class T
 
     public static function removeBasePath($file)
     {
-        $bp = '';
-        $possibleBasePath = __DIR__;
-        if (strpos($file, $possibleBasePath) === 0) {
-            $bp = $possibleBasePath . '/';
+        if (isset($_ENV['MAGE_BASE_PATH'])){
+            //something like '/vagrant/'
+            $bp = $_ENV['MAGE_BASE_PATH'];
         }
-        if (!$bp) {
-            $possibleBasePath = dirname(__DIR__);
+        else{
+            $bp = '';
+            $possibleBasePath = __DIR__;
             if (strpos($file, $possibleBasePath) === 0) {
                 $bp = $possibleBasePath . '/';
             }
-        }
+            if (!$bp) {
+                $possibleBasePath = dirname(__DIR__);
+                if (strpos($file, $possibleBasePath) === 0) {
+                    $bp = $possibleBasePath . '/';
+                }
+            }
 
-        if (!$bp) {
-            $possibleBasePath = dirname(dirname(__DIR__));
-            if (strpos($file, $possibleBasePath) === 0) {
-                $bp = $possibleBasePath . '/';
+            if (!$bp) {
+                $possibleBasePath = dirname(dirname(__DIR__));
+                if (strpos($file, $possibleBasePath) === 0) {
+                    $bp = $possibleBasePath . '/';
+                }
             }
         }
         $file = str_replace($bp, '', $file);
