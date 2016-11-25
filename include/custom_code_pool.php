@@ -38,6 +38,9 @@ Class CodePool
             $vContents = file_get_contents($vOriginal);
             $vContents = str_replace($vClassOriginalName,$vClassOriginalCustomName ,$vContents);
             $bFileWritten = file_put_contents($vTargetPath, $vContents);
+            if ($bFileWritten){
+                chmod($vTargetPath, 0777);
+            }
         }
     }
 
