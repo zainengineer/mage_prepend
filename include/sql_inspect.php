@@ -88,4 +88,26 @@ class SqlInspect
         $this->bKeyValue = $bValue;
         return $this;
     }
+
+    public static function embed($vSql, $iLimit =5){
+        /**
+         * for some reason
+         * ZainPrePend\MageInclude\SqlInspect::embed('select * from catalog_product_entity');
+         * is not working in Watches
+         * it goes circular in eval for no reason
+         */
+        try {
+            if (!function_exists('mageCoreErrorHandler')){
+                return "Mage not initialized";
+            }
+            if (!@class_exists('\Mage',false)){
+                return 'Mage not initialized';
+            }
+            $oObject = new self($vSql,$iLimit);
+            return $oObject->getQueryRow();
+        } catch(\Exception $e){
+            return $e->getMessage();
+        }
+
+    }
 }
