@@ -6,12 +6,10 @@ abstract class Mage_Core_Controller_Varien_Action extends Mage_Core_Controller_V
     public function preDispatch()
     {
         parent::preDispatch();
-        // Mage::getSingleton('checkout/session')->getQuote()->getData()
-        $oSession =  Mage::getSingleton('checkout/session');
-        if ($oSession  && ($oQuote = $oSession->getQuote())){
-            // Mage::getSingleton('checkout/session')->getQuote->getData()
-            \ZainPrePend\lib\T::printr($oQuote->getData(),true,'quote');
-        };
+        $vPreDispatchInclude = AUTO_PREPEND_BASE_PATH_Z . '/include/local_modified/pre_dispatch.php';
+        if (file_exists($vPreDispatchInclude)){
+            include $vPreDispatchInclude;
+        }
         \ZainPrePend\lib\T::printr(1,true,'');
         exit();
     }

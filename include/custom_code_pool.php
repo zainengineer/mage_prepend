@@ -9,37 +9,58 @@ Class CodePool
         $this->enableCustomCodePool();
         $this->copyFiles();
     }
+    public function injectPath()
+    {
+        
+    }
     protected function enableCustomCodePool()
     {
-        $vCustomPath = $this->getCustomCodePoolPath();
-        $GLOBALS['paths'] = array(
-            $vCustomPath,
-        );
-//        $vMagentoIncludePath =  get_include_path();
-//        set_include_path($vCustomPath . PS . $vMagentoIncludePath);
+        //works only with some projects where $paths does not start with array
+
+//        $vCustomPath = $this->getCustomCodePoolPath();
+//        $GLOBALS['paths'] = array(
+//            $vCustomPath,
+//        );
+    define('COMPILER_INCLUDE_PATH', dirname(__FILE__). '/compiled_path');
 
     }
-    protected function getCustomCodePoolPath()
+    public function getCustomCodePoolPath()
     {
         return dirname(dirname(__FILE__)) . '/custom_code_pool';
     }
     protected function copyFiles()
     {
-        $vOriginal = 'app/code/core/Mage/Core/Controller/Varien/Action.php';
+        $vOriginalPath = 'app/code/core/Mage/Core/Controller/Varien/Action.php';
         $vPoolPath = 'Mage/Core/Controller/Varien/Action.php';
         $vTargetPoolPath = 'Mage/Core/Controller/Varien/ActionZCustom.php';
         $vClassOriginalName = 'Mage_Core_Controller_Varien_Action';
-        $vClassOriginalCustomName = 'Mage_Core_Controller_Varien_ActionZCustom';
-        $vTargetPath = $this->getCustomCodePoolPath() . "/$vTargetPoolPath";
+        $this->modifyTarget($vClassOriginalName, $vTargetPoolPath, $vOriginalPath);
+
+        $vAutoloadTarget = dirname(__FILE__) . '/compiled_path/Varien_AutoloadZCustom.php';
+        $this->modifyTarget('Varien_Autoload', $vAutoloadTarget, 'lib/Varien/Autoload.php');
+
+    }
+    protected function modifyTarget($vClassOriginalName, $vTargetPoolPath, $vOriginalPath)
+    {
+        $vClassOriginalCustomName = $vClassOriginalName . 'ZCustom';
+        if (substr($vTargetPoolPath,0,1) == '/'){
+            $vTargetPath = $vTargetPoolPath;
+        }
+        else{
+            $vTargetPath = $this->getCustomCodePoolPath() . "/$vTargetPoolPath";
+        }
+
         if (true || !file_exists($vTargetPath)){
             if (!is_dir(dirname($vTargetPath))){
                 $bFolderCreated = mkdir(dirname($vTargetPath),0777,true);
             }
-            $vContents = file_get_contents($vOriginal);
-            $vContents = str_replace($vClassOriginalName,$vClassOriginalCustomName ,$vContents);
+            $vContents = file_get_contents($vOriginalPath);
+            $vContents = str_replace('class ' .$vClassOriginalName,'class ' . $vClassOriginalCustomName ,$vContents);
             $bFileWritten = file_put_contents($vTargetPath, $vContents);
             if ($bFileWritten){
                 chmod($vTargetPath, 0777);
+            }else{
+                throw new \Exception('cannot write to ' . $vTargetPath);
             }
         }
     }
