@@ -1,6 +1,4 @@
 <?php
-namespace ZainPrePend\MageInclude;
-
 if (!isset($_GET['op'])){
     return;
 }
@@ -13,4 +11,7 @@ if ($vOp == 'xdebug'){
     xdebug_break();
     \ZainPrePend\lib\T::printr(1,true,'');
     exit;
+}
+if ($vOp == 'mage_info'){
+    \ZainPrePend\Code\CodePool::getInstance();
 }
