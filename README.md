@@ -39,6 +39,7 @@ ignore changes in temp file
 * `git update-index --assume-unchanged include/temp.php`
 * `git update-index --assume-unchanged include/server_param.php`
 * `git update-index --assume-unchanged var/dump.txt`
+* `git update-index --assume-unchanged include/local_modified/*`
 
 To temporarily replace magento Exception printing with custom exception printing
 
