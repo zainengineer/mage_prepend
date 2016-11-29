@@ -15,7 +15,7 @@ function executeIndex()
         }
         require_once dirname(__FILE__) . '/include/shutdown.php';
         require_once dirname(__FILE__) . '/include/lib.php';
-        require_once dirname(__FILE__) . '/include/server_param.php';
+        require_once dirname(__FILE__) . '/include/local_modified/server_param.php';
         require_once dirname(__FILE__) . '/include/mage_include.php';
         require_once dirname(__FILE__) . '/include/param_response.php';
         require_once dirname(__FILE__) . '/include/eav_inspect.php';
@@ -33,7 +33,7 @@ function executeIndex()
         require_once dirname(__FILE__) . '/include/remove_admin_product_popup.php';
         require_once dirname(__FILE__) . '/include/ticks.php';
         require_once dirname(__FILE__) . '/include/filter_git.php';
-        $vTempFile = dirname(__FILE__) . '/include/temp.php';
+        $vTempFile = dirname(__FILE__) . '/include/local_modified/temp.php';
         require_once $vTempFile;
     }
     catch (\Exception $e){
