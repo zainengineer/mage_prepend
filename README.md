@@ -37,7 +37,7 @@ for shared host you can use
 ignore changes in temp file 
 * cd zain_custom
 * `git update-index --assume-unchanged var/dump.txt`
-* `git update-index --assume-unchanged include/local_modified/`
+* `git update-index --assume-unchanged include/local_modified/*.php`
 
 To temporarily replace magento Exception printing with custom exception printing
 
