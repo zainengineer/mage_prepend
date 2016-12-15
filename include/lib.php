@@ -221,13 +221,22 @@ Class T
         return $aReturn;
     }
 
+    public static function log($content)
+    {
+        return Logger::addLog($content);
+    }
+    public static function dumpContentToFile($content, $varExport = true)
+    {
+        Logger::dumpContentToFile($content,$varExport);
+    }
+
 }
 
 Class Logger
 {
     public static $log = array();
     public static $appendLogToFile = true;
-    public static $appendLogFile = '/tmp/zain_log_prepend.txt';
+    public static $appendLogFile = '/local_modified/zain_log_prepend.txt';
     public static $callInit = true;
 
     public static function init()
@@ -236,7 +245,7 @@ Class Logger
             return;
         }
         self::$callInit = true;
-        self::$appendLogFile = dirname(__FILE__) . '/temp/zain_log_prepend.txt';
+        self::$appendLogFile = dirname(__FILE__) . self::$appendLogFile;
         $targetDirectory = dirname(self::$appendLogFile);
         if (!file_exists($targetDirectory)) {
             mkdir($targetDirectory);
@@ -266,7 +275,10 @@ Class Logger
         $newContent = is_string($newContent) ? $newContent : var_export($newContent, true);
         $content = $content . $newContent . "\n";
         @file_put_contents(self::$appendLogFile, $content);
-        if (!is_writable(self::$appendLogFile)){
+        if (is_writable(self::$appendLogFile)) {
+            @chmod(self::$appendLogFile,0777);
+        }
+        else{
             if (function_exists('xdebug_break')){
                 xdebug_break();
             }
@@ -277,7 +289,7 @@ Class Logger
 
     public static function dumpContentToFile($content, $varExport = true)
     {
-        $dumpFile = dirname(dirname(__FILE__)) . '/var/dump.txt';
+        $dumpFile = dirname(__FILE__) . '/local_modified/dump.txt';
         $dumpContent = $content;
         if ($varExport && (!is_string($content))) {
             $dumpContent = var_export($dumpContent, true);
@@ -286,6 +298,7 @@ Class Logger
         if (function_exists('xdebug_break')) {
             xdebug_break();
         }
+        chmod($dumpFile,0777);
         return is_string($dumpContent) ? strlen($dumpContent) : count($dumpContent);
     }
 }

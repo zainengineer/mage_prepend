@@ -25,8 +25,6 @@ sudo vi /etc/apache2/sites-enabled/site_config_file
 php_value auto_prepend_file "/var/www/vhosts/your_website_root/zain_custom/auto_prepend_file.php"
 sudo service php5-fpm restart
 sudo service apache2 restart
-touch zain_custom/dump.txt
-chmod 777 zain_custom/dump.txt
 ```
 
 for shared host you can use
@@ -36,8 +34,11 @@ for shared host you can use
 
 ignore changes in temp file 
 * cd zain_custom
-* `git update-index --assume-unchanged var/dump.txt`
 * `git update-index --assume-unchanged include/local_modified/*.php`
+
+fix permissions
+
+    chmod a+w include/local_modified -R
 
 To temporarily replace magento Exception printing with custom exception printing
 
