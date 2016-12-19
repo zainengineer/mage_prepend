@@ -29,8 +29,7 @@ sudo service apache2 restart
 
 for shared host you can use
 * `vi .htaccess`
-* add
-** `php_value  auto_prepend_file zain_custom/auto_prepend_file.php`
+* `php_value  auto_prepend_file zain_custom/auto_prepend_file.php`
 
 ignore changes in temp file 
 * cd zain_custom
