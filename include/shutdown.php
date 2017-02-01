@@ -32,11 +32,13 @@ function ZainShutDownFunction()
             if (function_exists('xdebug_break')){
                 xdebug_break();
             }
-            return;
+            if (!empty($_ENV['ignore_last_error'])){
+                return;
+            }
         }
     }
     //suppressed errors
-    if (!error_reporting()) {
+    if (!error_reporting() && !$error) {
         outPutAfterSuccess();
         return;
     }
