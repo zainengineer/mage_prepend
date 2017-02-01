@@ -63,7 +63,7 @@ Class CodePool
                 $vWritePathCompile = AUTO_PREPEND_BASE_PATH_Z . '/include/compiled_path';
                 $rWritePathCodePool = AUTO_PREPEND_BASE_PATH_Z . '/custom_code_pool/';
                 $vCommand = "chmod a+w $vWritePathCompile -R && chmod a+w $rWritePathCodePool -R ";
-                throw new \Exception('cannot write to ' . $vTargetPath . " try \n<br/> $vCommand and \n<br/>");
+                throw new \Exception('cannot write to ' . $vTargetPath . " try \n<br/> $vCommand \n<br/>");
             }
         }
     }
