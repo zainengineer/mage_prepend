@@ -31,12 +31,10 @@ for shared host you can use
 * `vi .htaccess`
 * `php_value  auto_prepend_file zain_custom/auto_prepend_file.php`
 
-ignore changes in temp file 
-* cd zain_custom
-* `git update-index --assume-unchanged include/local_modified/*.php`
+ignore changes in temp file and fix permissions 
 
-fix permissions
-
+    cd zain_custom
+    git update-index --assume-unchanged include/local_modified/*.php
     chmod a+w include/local_modified -R
 
 To temporarily replace magento Exception printing with custom exception printing
