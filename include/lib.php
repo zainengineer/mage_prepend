@@ -156,6 +156,9 @@ Class T
         echo $response;
     }
 
+    public static function log($vContent){
+        Logger::log($vContent);
+    }
     public static function removeBasePath($file)
     {
         if (isset($_ENV['MAGE_BASE_PATH'])){
