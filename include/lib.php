@@ -92,19 +92,18 @@ Class T
         }
         if ($console) {
             $htmlEntities = false;
-            $response .= $file . ' on line ' . $line . " $name is: ";
+            $response .= $file . ':' . $line . " $name is: ";
         }
         else {
 
-            $phpStormRemote = true;
             $vPHPStormFile = self::isVM() ? $file : $vFullFilePath;
             $response .= self::getPhpStormLine($vPHPStormFile, $line);
             $response .= '<div style="background: #FFFBD6">';
              $nameLine = '';
             if ($name)
                 $nameLine = '<b> <span style="font-size:18px;">' . $name . "</span></b> $classHint printr:<br/>";
-            $response .= '<span style="font-size:12px;">' . $nameLine . ' ' . $file . ' on line ' . $bt[0]['line'] . '</span>';
-            $response .= '<div style="border:1px so lid #000;">';
+            $response .= '<span style="font-size:12px;">' . $nameLine . ' ' . $file . ':' . $bt[0]['line'] . '</span>';
+            $response .= '<div style="border:1px solid #000;">';
             $response .= $preStart;
         }
         if ($return) {
