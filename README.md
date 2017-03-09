@@ -6,6 +6,22 @@ Use Auto prepend before magento index
 ```
 git clone git@github.com:zainengineer/mage_prepend.git zain_custom
 
+//in index.php add this to find include directories
+echo php_ini_loaded_file() . "<br/>\n";
+$aDir = array();
+if ($filelist = php_ini_scanned_files()) {
+    if (strlen($filelist) > 0) {
+        $files = explode(',', $filelist);
+
+        foreach ($files as $file) {
+            $aDir[dirname(trim($file))] = dirname(trim($file));
+        }
+    }
+}
+echo "<pre>";
+print_r($aDir);
+die;
+
 sudo vi /etc/php5/fpm/conf.d/auto_prepend.ini 
 auto_prepend_file = '/vagrant/zain_custom/auto_prepend_file.php'
 ; auto_prepend_file = '/vagrant/public/zain_custom/auto_prepend_file.php'
