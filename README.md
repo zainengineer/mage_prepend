@@ -15,20 +15,9 @@ sudo service apache restart
 
 to detect actual location of php include path 
 ```
-//in index.php add this to find include directories
-echo php_ini_loaded_file() . "<br/>\n";
-$aDir = array();
-if ($filelist = php_ini_scanned_files()) {
-    if (strlen($filelist) > 0) {
-        $files = explode(',', $filelist);
-
-        foreach ($files as $file) {
-            $aDir[dirname(trim($file))] = dirname(trim($file));
-        }
-    }
-}
-echo "<pre>";
-print_r($aDir);
+//in index.php add this to see how you need to inject auto_prepend in vagrant 
+$vFile = dirname(__FILE__) . "/zain_custom/tools/auto_prepend_command.php";
+file_exists($vFile) ? (include $vFile) : (print $vFile . ' does not exist');
 die;
 
 ```
