@@ -16,7 +16,7 @@ function SessionDestroyOnRequest()
             foreach ($cookies as $cookie) {
                 $parts = explode('=', $cookie);
                 $name = trim($parts[0]);
-                if ($name == 'XDEBUG_SESSION') {
+                if (in_array($name,array('XDEBUG_SESSION','adminhtml'))) {
                     continue;
                 }
                 $cookiNameList[] = $name;
