@@ -27,6 +27,10 @@ function executeIndex()
         if (file_exists($projectCustomFile)) {
             require_once $projectCustomFile;
         }
+        $aAutoInclude = glob(dirname(__FILE__) . '/project_custom/auto_include/*.php');
+        foreach ($aAutoInclude as $vAutoFile) {
+            require_once $vAutoFile;
+        }
         require_once dirname(__FILE__) . '/session_destroy.php';
         require_once dirname(__FILE__) . '/include/cache_url.php';
         require_once dirname(__FILE__) . '/include/duplicate_posts.php';
