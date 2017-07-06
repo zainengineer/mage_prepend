@@ -11,15 +11,17 @@ $bShowNext = false;
 //$bShowNext = true;
 if ($bShowNext){
     $bShowNext = false;
-    $action = "put actual code here";
+    $action = "this is a sample temp file not actual file";
     \ZainPrePend\lib\T::printr($action, false, '');
+    \ZainPrePend\lib\T::printr('snippet complete', false, '');
 }
 
 //$bShowNext = true;
 if ($bShowNext){
     $bShowNext = false;
-    $action = "put actual code here";
+    $action = "this is a sample temp file not actual file";
     \ZainPrePend\lib\T::printr($action, false, '');
+    \ZainPrePend\lib\T::printr('snippet complete', false, '');
 }
 
 \ZainPrePend\lib\T::printr(1,true,'');
