@@ -23,10 +23,7 @@ function executeIndex()
         require_once dirname(__FILE__) . '/include/custom_code_pool.php';
         require_once dirname(__FILE__) . '/include/misc.php';
         require_once dirname(__FILE__) . '/include/ignore_resource_requests.php';
-        $projectCustomFile = dirname(__FILE__) . '/project_custom/include.php';
-        if (file_exists($projectCustomFile)) {
-            require_once $projectCustomFile;
-        }
+        includeIfExists ('/project_custom/include.php');
         $aAutoInclude = glob(dirname(__FILE__) . '/project_custom/auto_include/*.php');
         foreach ($aAutoInclude as $vAutoFile) {
             require_once $vAutoFile;
@@ -37,13 +34,19 @@ function executeIndex()
         require_once dirname(__FILE__) . '/include/remove_admin_product_popup.php';
         require_once dirname(__FILE__) . '/include/ticks.php';
         require_once dirname(__FILE__) . '/include/filter_git.php';
-        $vTempFile = dirname(__FILE__) . '/include/local_modified/temp.php';
-        require_once $vTempFile;
+        includeIfExists ('/include/local_modified/temp.php');
     }
     catch (\Exception $e){
         \ZainPrePend\ShutDown\T::printException($e);
         die;
     }
 
+}
+function includeIfExists($vFilePath)
+{
+    $vFullPath = dirname(__FILE__) . $vFilePath;
+    if (file_exists($vFullPath)){
+        include $vFullPath;
+    }
 }
 executeIndex();
