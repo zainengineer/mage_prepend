@@ -8,6 +8,7 @@ if ($vOp == 'phpinfo'){
     exit;
 }
 if ($vOp == 'xdebug'){
+    $debug =1;
     xdebug_break();
     \ZainPrePend\lib\T::printr(1,true,'');
     exit;

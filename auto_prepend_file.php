@@ -35,6 +35,7 @@ function executeIndex()
         require_once dirname(__FILE__) . '/include/ticks.php';
         require_once dirname(__FILE__) . '/include/filter_git.php';
         includeIfExists ('/include/local_modified/temp.php');
+        includeIfExists ('/include/local_modified/raw.php');
     }
     catch (\Exception $e){
         \ZainPrePend\ShutDown\T::printException($e);
