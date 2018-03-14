@@ -67,7 +67,7 @@ Class T
 
     }
 
-    public static function printr($object, $simpleArrayElements = true,$name = '', $htmlEntities = true, $return = false, $options = array())
+    public static function printr($object, $simpleArrayElements = true,$name = '', $htmlEntities = false, $return = false, $options = array())
     {
         $console = false;
         $response = '';
@@ -118,10 +118,15 @@ Class T
         }
         if (is_array($object) | $return) {
             if ($return) {
-                $response .= @print_r($object, true);
+                //print_r easily reaches memory limit so using print_r
+                ob_start();
+                var_dump($object);
+                $response.= ob_get_clean();
+//                $response .= @print_r($object, true);
             }
             else {
-                print_r($object);
+//                print_r($object);
+                var_dump($object);
             }
         }
         else {

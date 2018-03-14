@@ -1,6 +1,9 @@
 <?php
 namespace ZainPrePend\Index;
 define('AUTO_PREPEND_BASE_PATH_Z', dirname(__FILE__));
+if (php_sapi_name() == 'cli') {
+    return ;
+}
 //so variables do not jump into global name spaces
 function executeIndex()
 {
