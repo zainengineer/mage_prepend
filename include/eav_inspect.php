@@ -10,16 +10,16 @@ class EavInspect
     protected $rCore;
     protected $bShowAttributeId = false;
     protected $bShowTable = false;
-//    protected $vEntityIdAttribute = 'entity_id';
-    protected $vEntityIdAttribute = 'instance_id';
-//    protected $aAlwaysInclude = array('entity_id','name','sku');
-    protected $aAlwaysInclude = array('instance_id','instance_type','title');
-//    protected $vAttributeId = 'attribute_id';
-    protected $vAttributeId = 'parameter_id';
-//    protected $vAttributeCodeAttribute = 'attribute_code';
-    protected $vAttributeCodeAttribute = 'code';
-//    protected $vEavTableName = 'eav_attribute';
-    protected $vEavTableName = 'eavwidget_parameter';
+    protected $vEntityIdAttribute = 'entity_id';
+//    protected $vEntityIdAttribute = 'instance_id';
+    protected $aAlwaysInclude = array('entity_id','name','sku');
+//    protected $aAlwaysInclude = array('instance_id','instance_type','title');
+    protected $vAttributeId = 'attribute_id';
+//    protected $vAttributeId = 'parameter_id';
+    protected $vAttributeCodeAttribute = 'attribute_code';
+//    protected $vAttributeCodeAttribute = 'code';
+    protected $vEavTableName = 'eav_attribute';
+//    protected $vEavTableName = 'eavwidget_parameter';
 
     /**
      * @var
