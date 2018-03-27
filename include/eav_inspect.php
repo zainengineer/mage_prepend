@@ -10,6 +10,17 @@ class EavInspect
     protected $rCore;
     protected $bShowAttributeId = false;
     protected $bShowTable = false;
+//    protected $vEntityIdAttribute = 'entity_id';
+    protected $vEntityIdAttribute = 'instance_id';
+//    protected $aAlwaysInclude = array('entity_id','name','sku');
+    protected $aAlwaysInclude = array('instance_id','instance_type','title');
+//    protected $vAttributeId = 'attribute_id';
+    protected $vAttributeId = 'parameter_id';
+//    protected $vAttributeCodeAttribute = 'attribute_code';
+    protected $vAttributeCodeAttribute = 'code';
+//    protected $vEavTableName = 'eav_attribute';
+    protected $vEavTableName = 'eavwidget_parameter';
+
     /**
      * @var
      * customer_entity
@@ -36,7 +47,7 @@ class EavInspect
             return 'record not found';
         }
         $aEav = $aInspect['Eav'];
-        $aAlwaysInclude = array('entity_id','name','sku');
+        $aAlwaysInclude = $this->aAlwaysInclude;
         foreach ($aMainTable as $k => $v) {
             if ((strpos($k,$vFieldToFilter)!==false) || in_array($k,$aAlwaysInclude)){
                 $aFilter['Main Table'][$k] = $v;
@@ -82,7 +93,7 @@ class EavInspect
     public function inspectMain($vAttribute = '*')
     {
         $vTableName = $this->vEntityTable;
-        $vSql  = "select $vAttribute from $vTableName WHERE entity_id = {$this->iProductId}";
+        $vSql  = "select $vAttribute from $vTableName WHERE {$this->vEntityIdAttribute} = {$this->iProductId}";
         $aReturn = $this->rRead->fetchRow($vSql);
         if (count(array_keys($aReturn)) == 1){
             return current($aReturn);
@@ -114,26 +125,26 @@ class EavInspect
 
     protected function inspectEavTable($vTable)
     {
-        $vSql = "SELECT *  FROM $vTable WHERE (entity_id = '{$this->iProductId}')";
+        $vSql = "SELECT *  FROM $vTable WHERE ({$this->vEntityIdAttribute} = '{$this->iProductId}')";
         $aAllRows = $this->rRead->fetchAll($vSql);
         $aAttributeId = array();
         foreach ($aAllRows as $aSingleRow) {
-            $aAttributeId[$aSingleRow['attribute_id']] = (int) $aSingleRow['attribute_id'];
+            $aAttributeId[$aSingleRow[$this->vAttributeId]] = (int) $aSingleRow[$this->vAttributeId];
         }
         $vAttributeList = implode(',',$aAttributeId);
         if (!$vAttributeList){
             return array();
 //            throw new \Exception('No Eav attribute found for ' . $this->iProductId);
         }
-        $vSql = "SELECT attribute_id,attribute_code FROM eav_attribute WHERE attribute_id IN ($vAttributeList)";
+        $vSql = "SELECT {$this->vAttributeId},{$this->vAttributeCodeAttribute} FROM {$this->vEavTableName} WHERE {$this->vAttributeId} IN ($vAttributeList)";
         $aAttributeList = $this->rRead->fetchPairs($vSql);
         $aEavData = array();
         foreach ($aAllRows as $aSingleRow) {
-            if (isset($aAttributeList[ $aSingleRow['attribute_id']])){
-                $vAttributeCode = $aAttributeList[ $aSingleRow['attribute_id']];
+            if (isset($aAttributeList[ $aSingleRow[$this->vAttributeId]])){
+                $vAttributeCode = $aAttributeList[ $aSingleRow[$this->vAttributeId]];
             }
             else{
-                $vAttributeCode = 'unknown-attribute-'  . $aSingleRow['attribute_id'];
+                $vAttributeCode = 'unknown-attribute-'  . $aSingleRow[$this->vAttributeId];
             }
 
             //product etc
@@ -142,7 +153,7 @@ class EavInspect
                 //string key is needed so array_merge merges them properly
                 $vStringKey = 'store_id_' . $iStoreId;
                 if ($this->bShowAttributeId){
-                    $aEavData[$vStringKey ][ $aSingleRow['attribute_id'] . '/' .$vAttributeCode] = $aSingleRow['value'];
+                    $aEavData[$vStringKey ][ $aSingleRow[$this->vAttributeId] . '/' .$vAttributeCode] = $aSingleRow['value'];
                 }
                 else{
                     $aEavData[$vStringKey ][$vAttributeCode] = $aSingleRow['value'];
@@ -151,7 +162,7 @@ class EavInspect
             //customer etc
             else{
                 if ($this->bShowAttributeId){
-                    $aEavData[ $aSingleRow['attribute_id'] . '/' .$vAttributeCode] = $aSingleRow['value'];
+                    $aEavData[ $aSingleRow[$this->vAttributeId] . '/' .$vAttributeCode] = $aSingleRow['value'];
                 }
                 else{
                     $aEavData[$vAttributeCode] = $aSingleRow['value'];
