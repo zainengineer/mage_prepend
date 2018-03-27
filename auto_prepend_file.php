@@ -27,7 +27,8 @@ function executeIndex()
         require_once dirname(__FILE__) . '/include/misc.php';
         require_once dirname(__FILE__) . '/include/ignore_resource_requests.php';
         includeIfExists ('/project_custom/include.php');
-        $aAutoInclude = glob(dirname(__FILE__) . '/project_custom/auto_include/*.php');
+        $vAutoIncludePattern = dirname(__FILE__) . '/project_custom/auto_include/*.php';
+        $aAutoInclude = glob($vAutoIncludePattern);
         foreach ($aAutoInclude as $vAutoFile) {
             require_once $vAutoFile;
         }
