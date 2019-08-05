@@ -3,6 +3,14 @@ mage_prepend
 
 Use Auto prepend before magento index
 
+Quickest
+
+````
+$_SERVER['MAGE_IS_DEVELOPER_MODE'] = true;
+require_once __DIR__ . '/zain_custom/auto_prepend_file.php';
+````
+
+Other Options using php config
 ```
 git clone git@github.com:zainengineer/mage_prepend.git zain_custom
 
