@@ -196,6 +196,7 @@ class T
 
     public static function jsClearPageAndDisplayError($vStormLine, $aError)
     {
+        return ;
         $aConfig = array('stormLine' => $vStormLine);
         if (function_exists('xdebug_get_function_stack')){
             ob_start();
@@ -209,7 +210,8 @@ class T
             $vErrorDump = ob_get_clean();
         }
         else{
-            $vErrorDump = 'Could not get error dump because xdebug not enabled';
+            echo 'Could not get error dump because xdebug not enabled';
+            die;
         }
 
         $aConfig['errorDump'] = $vErrorDump;

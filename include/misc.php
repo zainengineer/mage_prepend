@@ -1,18 +1,18 @@
 <?php
-if (!isset($_GET['op'])){
+if (!isset($_GET['op'])) {
     return;
 }
 $vOp = $_GET['op'];
-if ($vOp == 'phpinfo'){
+if ($vOp == 'phpinfo') {
     phpinfo();
     exit;
 }
-if ($vOp == 'xdebug'){
-    $debug =1;
+if ($vOp == 'xdebug') {
+    $debug = 1;
     xdebug_break();
-    \ZainPrePend\lib\T::printr(1,true,'');
+    \ZainPrePend\lib\T::printr('function exists', true, '');
     exit;
 }
-if ($vOp == 'mage_info'){
+if ($vOp == 'mage_info') {
     \ZainPrePend\Code\CodePool::getInstance();
 }

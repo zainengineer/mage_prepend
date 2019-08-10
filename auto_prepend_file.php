@@ -1,6 +1,7 @@
 <?php
 namespace ZainPrePend\Index;
 define('AUTO_PREPEND_BASE_PATH_Z', dirname(__FILE__));
+define('AUTO_PREPEND_MAGENTO_BASE_PATH', dirname(dirname(__FILE__)));
 if (php_sapi_name() == 'cli') {
     return ;
 }

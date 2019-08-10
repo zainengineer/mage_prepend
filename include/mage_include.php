@@ -1,5 +1,6 @@
 <?php
 namespace ZainPrePend\MageInclude;
+require_once AUTO_PREPEND_BASE_PATH_Z . '/kint/kint_inc.php';
 function includeMage($code = null)
 {
 showErrors();
@@ -11,7 +12,7 @@ showErrors();
         return;
     }
     set_time_limit(0);
-    $fileName = dirname(__FILE__) . '/../../app/Mage.php';
+    $fileName = AUTO_PREPEND_MAGENTO_BASE_PATH . '/app/Mage.php';
     require_once($fileName);
     \Mage::app();
     if (is_null($code)){
