@@ -33,9 +33,9 @@ Class AutoInclude
         $path = $this->getSnippetPath();
         if (!file_exists($path)) {
             !d("$path does not exist");
-            !d("attempting  /?op=snippets");
 //            throw new Exception(($path) . ' does not exist');
             require_once __DIR__ . '/snippets.php';
+            die;
         }
     }
 
