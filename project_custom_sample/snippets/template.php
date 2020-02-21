@@ -5,6 +5,8 @@ class ClassName
 {
     public function __construct()
     {
+//        Mage::app()->setCurrentStore('default');
+//        Mage::getSingleton('core/session', array('name' => 'frontend'))->start();
     }
 
     public function test()
