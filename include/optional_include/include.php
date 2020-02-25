@@ -1,5 +1,9 @@
 <?php
 
+//common typo and muscle memory, so work around
+if (isset($_GET['op']) && ($_GET['op']=='snippets')){
+    $_GET['zop'] = 'snippets';
+}
 if (empty($_GET['zop'])){
     return ;
 }
