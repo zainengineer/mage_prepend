@@ -7,6 +7,7 @@ class ClassName
     {
 //        Mage::app()->setCurrentStore('default');
 //        Mage::getSingleton('core/session', array('name' => 'frontend'))->start();
+//        Mage::register('isSecureArea', true, true);
     }
 
     public function test()

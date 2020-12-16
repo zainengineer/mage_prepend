@@ -1,12 +1,17 @@
 <?php
-
-use Magento\Framework\App\Bootstrap;
-use Magento\Framework\App\Filesystem\DirectoryList;
-
+namespace ZainCustom\Snippets\Includes;
 Class AutoInclude
 {
     protected $programmaticSnippetPath;
-
+    protected static $instance;
+    public function __construct()
+    {
+        self::$instance = $this;
+    }
+    public static function getInstance()
+    {
+        return self::$instance;
+    }
     protected function getSnippetName()
     {
         return $this->programmaticSnippetPath ?: $_GET['zop'];
@@ -51,7 +56,7 @@ Class AutoInclude
 
     }
 
-    protected function includeMagentoSnippet()
+    public function initializeMagento()
     {
         $path = $this->getSnippetPath();
         if (strpos($path,'pre_')===0){
@@ -61,11 +66,16 @@ Class AutoInclude
             require_once AUTO_PREPEND_BASE_PATH_Z . '/include/mage_include.php';
             \ZainPrePend\MageInclude\includeMage();
         }
+    }
+    protected function includeMagentoSnippet()
+    {
+        $path = $this->getSnippetPath();
         require_once __DIR__ . '/action_detect.php';
         require_once $path;
     }
 }
 
 $autoInclude = new AutoInclude();
+
 $autoInclude->processSnippet();
 die;

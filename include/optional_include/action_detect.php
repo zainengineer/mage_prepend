@@ -89,8 +89,10 @@ Class ZActionDetect
     }
     public static function showOutput($className)
     {
+
         if (empty($GLOBALS['just_include_snippet_class'])) {
 
+            \ZainCustom\Snippets\Includes\AutoInclude::getInstance()->initializeMagento();
             $instanceName = NEW $className();
 
             try {

@@ -14,9 +14,14 @@ showErrors();
     set_time_limit(0);
     $fileName = AUTO_PREPEND_MAGENTO_BASE_PATH . '/app/Mage.php';
     require_once($fileName);
-    \Mage::app();
-    if (is_null($code)){
-        \Mage::app()->setCurrentStore(0);
+    if (isset($_SERVER['MAGE_RUN_CODE'])){
+        \Mage::app($_SERVER['MAGE_RUN_CODE'],$_SERVER['MAGE_RUN_TYPE']);
+    }
+    else{
+        \Mage::app();
+        if (is_null($code)){
+            \Mage::app()->setCurrentStore(0);
+        }
     }
     showErrors();
     \Mage::setIsDeveloperMode(true);
